@@ -1,0 +1,35 @@
+
+  # "p": "parsed",
+  # "o": "optimized",
+  # "q": "quantized",
+  # "a": "adapted",
+  # "g": "BY",
+imodel: 
+  cudamode: false  
+  mmu: true
+  speedmode: false
+  compressFtmp: false
+  dir: ../imodel/cls/16
+  stage: g
+  sim: false
+  ip: 192.168.124.134
+  save: true
+  show: true
+ 
+dataset:
+  data_dir: ../io/cls/input
+  label_dir: ../io/cls/label
+  list: ../io/cls/segrnn_cls_input.txt
+  res: ../io/cls/output
+
+param:
+  task: exp_classification
+  label_len: 1
+  seq_len: 405
+  dec_in: 61
+  pre_len: 2
+  dec_out: 1
+camera:
+  do: true
+  camerah: 1080
+  cameraw: 1920

@@ -1,0 +1,42 @@
+
+  # "p": "parsed",
+  # "o": "optimized",
+  # "q": "quantized",
+  # "a": "adapted",
+  # "g": "BY",
+imodel: 
+  cudamode: false  
+  mmu: true
+  speedmode: false
+  compressFtmp: false
+  dir1: ../imodel/superpoint-512x640
+  dir2: ../imodel/superglue-indoor-256-norm
+  stage: g
+  sim: false
+  ip: 192.168.125.183
+  save: true
+  show: true
+ 
+dataset:
+  dir: ../io/input/indoor
+  list: ../io/indoor.txt
+  res: ../io/output
+
+param: 
+  net_1_w: 640
+  net_1_h: 512
+  net_2_w: 640
+  net_2_h: 512
+  n_kpt: 256
+  net_1_norm: [0.007873055033796416 , 0.002480281854239036]
+  net_2_norm: [0.007873055033796416 , 0.002480281854239036]
+  net_1_keypoint_threshold: 0.1
+  net_2_keypoint_threshold: 0.1
+  match_threshold: 0.6
+  bin_score: 2.3457
+  border: 4
+
+camera:
+  do: true
+  camerah: 1080
+  cameraw: 1920

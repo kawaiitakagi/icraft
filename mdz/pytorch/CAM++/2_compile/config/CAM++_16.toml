@@ -1,0 +1,53 @@
+[parse]
+net_name = "CAM++"
+framework = "onnx"
+frame_version = "1.9"
+inputs = [1,365,80]
+inputs_layout = "FD"
+pre_method = "nop"
+pre_scale = "nop"
+pre_mean = "nop"
+channel_swap ="nop"
+network = "./fmodel/CAM++_predictor_1x365x80.onnx"
+jr_path = "../3_deploy/modelzoo/CAM++/imodel/16/"
+
+[optimize]
+target = "BUYI"
+json = "../3_deploy/modelzoo/CAM++/imodel/16/CAM++_parsed.json"
+raw = "../3_deploy/modelzoo/CAM++/imodel/16/CAM++_parsed.raw"
+jr_path = "../3_deploy/modelzoo/CAM++/imodel/16/"
+
+[quantize]
+forward_mode = "image" 
+saturation = "kld"
+forward_dir = "./qtset/CNceleB"
+forward_list = "./qtset/CNceleB.txt"
+batch = 1
+bits = 16
+json = "../3_deploy/modelzoo/CAM++/imodel/16/CAM++_optimized.json"
+raw = "../3_deploy/modelzoo/CAM++/imodel/16/CAM++_optimized.raw"
+jr_path = "../3_deploy/modelzoo/CAM++/imodel/16/"
+per = "channel"
+target = "buyi"
+
+[adapt]
+target = "BUYI"
+json = "../3_deploy/modelzoo/CAM++/imodel/16/CAM++_quantized.json"
+raw = "../3_deploy/modelzoo/CAM++/imodel/16/CAM++_quantized.raw"
+jr_path = "../3_deploy/modelzoo/CAM++/imodel/16/"
+
+
+[generate]
+json = "../3_deploy/modelzoo/CAM++/imodel/16/CAM++_adapted.json"
+raw = "../3_deploy/modelzoo/CAM++/imodel/16/CAM++_adapted.raw"
+jr_path = "../3_deploy/modelzoo/CAM++/imodel/16/"
+
+
+[run]
+log_time = true
+log_io = true
+dump_format = "SFB"
+json = "../3_deploy/modelzoo/CAM++/imodel/16/CAM++_BY.json"
+raw = "../3_deploy/modelzoo/CAM++/imodel/16/CAM++_BY.raw"
+input = "./qtset/CNceleB/7.ftmp"
+backends = "BY,socket://ql100aiu@192.168.125.184:9981?npu=0x40000000&dma=0x80000000;Host"

@@ -1,0 +1,51 @@
+[parse]
+net_name = "AiATrack"
+framework = "pytorch"
+inputs = [[ 1, 320, 320, 3], [400, 1, 256], [400, 4, 64], [400, 1, 256], [1600, 1, 256], [400, 1, 256], [1600, 1, 256], [400, 4, 64], [400, 16, 64]]
+inputs_layout = "NHWC;FD;FD;FD;FD;FD;FD;FD;FD"
+pre_method = "nop;nop;nop;nop;nop;nop;nop;nop;nop"
+pre_scale = "58.395,57.12,57.375;nop;nop;nop;nop;nop;nop;nop;nop"
+pre_mean = "123.675,116.28,103.53;nop;nop;nop;nop;nop;nop;nop;nop"
+channel_swap = "0,1,2;nop;nop;nop;nop;nop;nop;nop;nop"
+network = "fmodel/AiATrack_ensemble4_320x320_traced.pt"
+jr_path = "../3_deploy/modelzoo/AiATrack/imodel/8/"
+frame_version = "1.9"
+
+[optimize]
+target = "BUYI"
+json = "../3_deploy/modelzoo/AiATrack/imodel/8/AiATrack_parsed.json"
+raw = "../3_deploy/modelzoo/AiATrack/imodel/8/AiATrack_parsed.raw"
+jr_path = "../3_deploy/modelzoo/AiATrack/imodel/8/"
+# pass_off = "icraft.MergeConv2dBatchnormPass"
+
+[quantize]
+forward_mode = "image"
+saturation = "null"
+forward_dir = "./qtset/AiATrack_multi_5seqs"
+forward_list = "./qtset/AiATrack_multi_5seqs.txt"
+bits = 8
+json = "../3_deploy/modelzoo/AiATrack/imodel/8/AiATrack_optimized.json"
+raw = "../3_deploy/modelzoo/AiATrack/imodel/8/AiATrack_optimized.raw"
+jr_path = "../3_deploy/modelzoo/AiATrack/imodel/8/"
+per = "channel"
+target = "buyi"
+no_imagemake = "1,2,3,4,5,6,7,8"
+no_transinput = "1,2,3,4,5,6,7,8"
+
+[adapt]
+target = "BUYI"
+json = "../3_deploy/modelzoo/AiATrack/imodel/8/AiATrack_quantized.json"
+raw = "../3_deploy/modelzoo/AiATrack/imodel/8/AiATrack_quantized.raw"
+jr_path = "../3_deploy/modelzoo/AiATrack/imodel/8/"
+pass_on =  "customop.ImageMakePass"
+custom_config = "config/customop/aiatrack.toml"
+
+[generate]
+json = "../3_deploy/modelzoo/AiATrack/imodel/8/AiATrack_adapted.json"
+raw = "../3_deploy/modelzoo/AiATrack/imodel/8/AiATrack_adapted.raw"
+jr_path = "../3_deploy/modelzoo/AiATrack/imodel/8/"
+log_path = "./logs/"
+
+
+
+

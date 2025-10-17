@@ -1,0 +1,16 @@
+conda create -n yolov5_obb python=3.9
+conda activate yolov5_obb
+pip install torch==1.9.0+cpu torchvision==0.10.0+cpu torchaudio==0.9.0 -f https://download.pytorch.org/whl/torch_stable.html
+
+cd 0_yolov5_obb
+pip install -r requirements.txt
+
+cd utils/nms_rotated
+pip install -v -e .
+
+cd ../../DOTA_devkit
+###https://swig.org/安装windows版本
+swig -c++ -python polyiou.i
+python setup.py build_ext --inplace
+
+pip install numpy==1.23.0

@@ -1,0 +1,35 @@
+---
+train:
+
+    params:
+        batch_size: 512 #512
+        epoch: 80
+        lr: 0.0005
+        decay: 0.5
+        decay_step: 60
+        warmup: 5
+
+    save:
+        metapath: "./train/Transformer-6layers/"
+        folder: mpii
+        model_name: trans6
+        step: 10
+
+    data:
+        image: "D:/code/dataset/FaceBased/MPIIFaceGaze_test/Image/"
+        label: "D:/code/dataset/FaceBased/MPIIFaceGaze_test/Label/"
+        header: True
+        name: mpii
+        isFolder: True
+        
+    pretrain:
+        enable: False  #True
+        path: "/train/Transformer-6layers/eth/checkpoint/Iter_50_trans6.pt"
+        device: -1
+
+    device: -1
+
+    reader: reader
+
+# dropout = 0
+# dim_feed = 512

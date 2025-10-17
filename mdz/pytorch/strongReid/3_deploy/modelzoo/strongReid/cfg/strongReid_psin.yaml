@@ -1,0 +1,23 @@
+
+  # "p": "parsed",
+  # "o": "optimized",
+  # "q": "quantized",
+  # "a": "adapted",
+  # "g": "BY",
+imodel: 
+  mmu: true
+  cudamode: false
+  speedmode: false
+  compressFtmp: false
+  dir: ../imodel/16
+  stage: p
+  sim: false
+  ip: 192.168.125.166
+  save: true
+  show: true
+  val: false
+ 
+dataset:
+  dir: ../io/input
+  list: ""
+  res: ../io/output

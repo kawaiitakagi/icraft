@@ -1,0 +1,8 @@
+[ImageMake]
+forward_dll = ""
+forward_so = ""
+no_imkpad = 1
+
+[InputFold]
+Meaningful_id = "0" # 有用的ifm
+IfmsPath = "./config/customop/detr_ori_in.txt"# 所有ifm的路径

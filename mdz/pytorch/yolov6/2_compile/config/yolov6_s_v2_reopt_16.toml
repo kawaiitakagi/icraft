@@ -1,0 +1,54 @@
+[parse]
+net_name ="yolov6_s_v2_reopt"
+framework = "pytorch"
+inputs = [1, 640, 640, 3]
+inputs_layout = "NHWC"
+pre_method = "resize"
+#post_method = nop
+pre_scale = [255.0, 255.0, 255.0]
+pre_mean = [0.0, 0.0, 0.0]
+channel_swap = [0, 1, 2]
+network =  "fmodel/yolov6s_v2_reopt_640x640.pt"
+jr_path = "../3_deploy/modelzoo/yolov6/imodel/16/"
+frame_version = "1.9"
+
+[optimize]
+target = "BUYI"
+json = "../3_deploy/modelzoo/yolov6/imodel/16/yolov6_s_v2_reopt_parsed.json"
+raw = "../3_deploy/modelzoo/yolov6/imodel/16/yolov6_s_v2_reopt_parsed.raw"
+jr_path = "../3_deploy/modelzoo/yolov6/imodel/16/"
+
+[quantize]
+forward_mode = "image" 
+saturation = "kld"
+forward_dir = "./qtset/coco"
+forward_list = "./qtset/coco.txt"
+bits = 16
+json = "../3_deploy/modelzoo/yolov6/imodel/16/yolov6_s_v2_reopt_optimized.json"
+raw = "../3_deploy/modelzoo/yolov6/imodel/16/yolov6_s_v2_reopt_optimized.raw"
+jr_path = "../3_deploy/modelzoo/yolov6/imodel/16/"
+per = "tensor"
+target = "buyi"
+
+[adapt]
+target = "BUYI"
+json = "../3_deploy/modelzoo/yolov6/imodel/16/yolov6_s_v2_reopt_quantized.json"
+raw = "../3_deploy/modelzoo/yolov6/imodel/16/yolov6_s_v2_reopt_quantized.raw" 
+jr_path = "../3_deploy/modelzoo/yolov6/imodel/16/"
+pass_on =  "customop.ImageMakePass,customop.DetPostPass"
+custom_config = "config/customop/yolov6.toml"
+
+[generate]
+json = "../3_deploy/modelzoo/yolov6/imodel/16/yolov6_s_v2_reopt_adapted.json"
+raw = "../3_deploy/modelzoo/yolov6/imodel/16/yolov6_s_v2_reopt_adapted.raw"
+jr_path =  "../3_deploy/modelzoo/yolov6/imodel/16/"
+log_path = "./logs/"
+
+[run]
+log_time = true
+log_io = true
+dump_format = "SFB"
+json = "../3_deploy/modelzoo/yolov6/imodel/16/yolov6_s_v2_reopt_BY.json"
+raw = "../3_deploy/modelzoo/yolov6/imodel/16/yolov6_s_v2_reopt_BY.raw"
+input = "./qtset/coco/bus.jpg"
+log_path = "./logs/"

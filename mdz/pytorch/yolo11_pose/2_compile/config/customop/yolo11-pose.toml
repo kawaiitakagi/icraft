@@ -1,0 +1,34 @@
+[ImageMake]
+forward_dll = ""
+forward_so = ""
+no_imkpad = 1
+
+[DetPost]
+forward_dll = ""
+forward_so = ""
+thr_f = 0.1 # 阈值
+cmp_en = 1  # 是否做阈值比较
+# YoloV3、YoloV4、YoloV5
+groups = 3
+anchor_num = 1
+position = 1
+
+# # YoloFace、 YoloV2、YoloV2-tiny
+#groups = 1
+#anchor_num = 5
+#position = 5
+
+# # YoloV3-tiny
+# groups = 2
+# anchor_num = 3
+# position = 5
+
+# # ByteTrack、YoloX
+# groups = 3
+# anchor_num = 1
+# position = 1
+
+# # FairMot
+# groups = 1
+# anchor_num = 1
+# position = 1

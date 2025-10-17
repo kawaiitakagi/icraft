@@ -1,0 +1,15 @@
+[ImageMake]
+forward_dll = ""
+forward_so = ""
+no_imkpad = 1
+
+[DetPost]
+forward_dll = ""
+forward_so = ""
+thr_f = 0.1 # 阈值 测精度时改为0.001
+cmp_en = 1  # 是否做阈值比较
+groups = 3
+anchor_num = 1
+position = -1
+
+

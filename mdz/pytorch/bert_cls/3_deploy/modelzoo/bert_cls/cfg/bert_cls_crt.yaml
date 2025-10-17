@@ -1,0 +1,22 @@
+
+  # "p": "parsed",
+  # "o": "optimized",
+  # "q": "quantized",
+  # "a": "adapted",
+  # "g": "BY",
+imodel: 
+  cudamode: false  
+  mmu: true
+  speedmode: false
+  compressFtmp: false
+  dir: ../imodel/16
+  stage: g
+  sim: false
+  ip: 192.168.125.183
+  save: true
+  show: true
+ 
+dataset:
+  dir: ../io/input/test.txt
+  onnx_model_path: ../vocab/saved_dict/embedding.onnx
+  res: ../io/output/max_indices.txt

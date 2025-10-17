@@ -1,0 +1,43 @@
+[ImageMake]
+forward_dll = "C:/Icraft/CLI/bin/customop.ImageMake.dll"
+forward_so = ""
+no_imkpad = 1
+
+[DetPost]
+forward_dll = "C:/Icraft/CLI/bin/customop.DetPost.dll"
+forward_so = ""
+thr_f = 0.1 # 阈值
+cmp_en = 1  # 是否做阈值比较
+# YoloV3、YoloV4、YoloV5
+groups = 3
+anchor_num = 3
+position = 5
+
+# # YoloFace、 YoloV2、YoloV2-tiny
+#groups = 1
+#anchor_num = 5
+#position = 5
+
+# # YoloV3-tiny
+# groups = 2
+# anchor_num = 3
+# position = 5
+
+# # ByteTrack、YoloX
+# groups = 3
+# anchor_num = 1
+# position = 1
+
+# # FairMot
+# groups = 1
+# anchor_num = 1
+# position = 1
+
+[WarpAffine]
+forward_dll = "C:/Icraft/CLI/bin/customop.WarpAffine.dll"
+forward_so = ""
+src_size=[1920,1080] # 输入图片的size, 必需输入，格式为[W,H]
+M =[[0.33333,0.0,0.0],[0.0,0.33333,0.0]] # M为空时，默认为[[1,0,0],[0,1,0]]
+flags = 1 # 1-INTER_LINEAR or 0-INTER_NEAREST，默认为1
+borderMode = 0 # 0-BORDER_CONSTANT pad常量 or 1-BORDER_REPLICATE：复制最边缘像素，默认为0（注意：目前只支持pad常量）
+borderValue = 0 # 当 borderMode取值为 BORDER_CONSTANT 时，指定pad value，默认为0（注意：目前只支持pad value=0）

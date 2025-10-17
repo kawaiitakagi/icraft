@@ -1,0 +1,53 @@
+[parse]
+net_name = "ResNetSE"
+framework = "pytorch"
+frame_version = "1.9"
+inputs = [1,398,80]
+inputs_layout = "FD"
+pre_method = "nop"
+pre_scale = "nop"
+pre_mean = "nop"
+channel_swap ="nop"
+network = "./fmodel/ResNetSE_predictor_1x398x80.pt"
+jr_path = "../3_deploy/modelzoo/ResNetSE/imodel/8/"
+
+[optimize]
+target = "BUYI"
+json = "../3_deploy/modelzoo/ResNetSE/imodel/8/ResNetSE_parsed.json"
+raw = "../3_deploy/modelzoo/ResNetSE/imodel/8/ResNetSE_parsed.raw"
+jr_path = "../3_deploy/modelzoo/ResNetSE/imodel/8/"
+
+[quantize]
+forward_mode = "image" 
+saturation = "kld"
+forward_dir = "./qtset/UrbanSound8K"
+forward_list = "./qtset/UrbanSound8K.txt"
+batch = 1
+bits = 8
+json = "../3_deploy/modelzoo/ResNetSE/imodel/8/ResNetSE_optimized.json"
+raw = "../3_deploy/modelzoo/ResNetSE/imodel/8/ResNetSE_optimized.raw"
+jr_path = "../3_deploy/modelzoo/ResNetSE/imodel/8/"
+per = "channel"
+target = "buyi"
+
+[adapt]
+target = "BUYI"
+json = "../3_deploy/modelzoo/ResNetSE/imodel/8/ResNetSE_quantized.json"
+raw = "../3_deploy/modelzoo/ResNetSE/imodel/8/ResNetSE_quantized.raw"
+jr_path = "../3_deploy/modelzoo/ResNetSE/imodel/8/"
+
+
+[generate]
+json = "../3_deploy/modelzoo/ResNetSE/imodel/8/ResNetSE_adapted.json"
+raw = "../3_deploy/modelzoo/ResNetSE/imodel/8/ResNetSE_adapted.raw"
+jr_path = "../3_deploy/modelzoo/ResNetSE/imodel/8/"
+
+
+[run]
+log_time = true
+log_io = true
+dump_format = "SFB"
+json = "../3_deploy/modelzoo/ResNetSE/imodel/8/ResNetSE_BY.json"
+raw = "../3_deploy/modelzoo/ResNetSE/imodel/8/ResNetSE_BY.raw"
+input = "./qtset/UrbanSound8K/100852-0-0-16.ftmp"
+backends = "BY,socket://ql100aiu@192.168.125.184:9981?npu=0x40000000&dma=0x80000000;Host"

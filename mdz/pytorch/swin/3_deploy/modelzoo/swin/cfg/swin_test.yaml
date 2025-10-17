@@ -1,0 +1,24 @@
+
+  # "p": "parsed",
+  # "o": "optimized",
+  # "q": "quantized",
+  # "a": "adapted",
+  # "g": "BY",
+imodel: 
+  cudamode: true  
+  mmu: true
+  speedmode: false
+  compressFtmp: false
+  dir:  ../imodel/16
+  stage: g
+  sim: false
+  ip: 192.168.125.166
+  show: true
+  save: true
+  eval: true
+dataset:
+  dir: E:/Dataset/CLS/ImageNet2012_Test5000/Images
+  list: ../io/imagenet2012_val5000.txt
+  label: ../io/5000labels.txt
+  res: ../io/output
+

@@ -1,0 +1,57 @@
+[parse]
+net_name = "superpoint-512x640"
+framework = "pytorch"
+inputs = [ 1, 512, 640, 1]
+inputs_layout = "NHWC"
+pre_method = "nop"
+#post_method = "nop"
+pre_scale = [ 255.0 ]
+pre_mean = [ 0.0 ]
+channel_swap = [ 0]
+network = "./fmodel/superpoint-512x640.pt"
+jr_path = "../3_deploy/modelzoo/superglue/imodel/superpoint-512x640/"
+frame_version = "1.9"
+
+[optimize]
+target = "BUYI"
+json = "../3_deploy/modelzoo/superglue/imodel/superpoint-512x640/superpoint-512x640_parsed.json"
+raw = "../3_deploy/modelzoo/superglue/imodel/superpoint-512x640/superpoint-512x640_parsed.raw"
+jr_path = "../3_deploy/modelzoo/superglue/imodel/superpoint-512x640/"
+
+[quantize]
+forward_mode = "image"
+saturation = "kld"
+forward_dir = "./qtset/superpoint"
+forward_list = "./qtset/superpoint.txt"
+bits = 8
+json = "../3_deploy/modelzoo/superglue/imodel/superpoint-512x640/superpoint-512x640_optimized.json"
+raw = "../3_deploy/modelzoo/superglue/imodel/superpoint-512x640/superpoint-512x640_optimized.raw"
+jr_path = "../3_deploy/modelzoo/superglue/imodel/superpoint-512x640/"
+decode_dll = "./config/customop/customop.SingleChannelDecoder.dll"
+per = "tensor"
+target = "buyi"
+
+[adapt]
+target = "BUYI"
+json = "../3_deploy/modelzoo/superglue/imodel/superpoint-512x640/superpoint-512x640_quantized.json"
+raw = "../3_deploy/modelzoo/superglue/imodel/superpoint-512x640/superpoint-512x640_quantized.raw"
+pass_on =  "icraft.AddReshape2Output1Pass,customop.ImageMakePass"
+custom_config = "./config/customop/superglue_config.toml"
+jr_path = "../3_deploy/modelzoo/superglue/imodel/superpoint-512x640/"
+
+[generate]
+json = "../3_deploy/modelzoo/superglue/imodel/superpoint-512x640/superpoint-512x640_adapted.json"
+raw = "../3_deploy/modelzoo/superglue/imodel/superpoint-512x640/superpoint-512x640_adapted.raw"
+jr_path = "../3_deploy/modelzoo/superglue/imodel/superpoint-512x640/"
+log_path = "./logs/"
+no_mergeops = true
+etmopt = 0
+
+[run]
+log_time = false
+log_io = false
+dump_format = "HQB"
+json = "../3_deploy/modelzoo/superglue/imodel/superpoint-512x640/superpoint-512x640_BY.json"
+raw = "../3_deploy/modelzoo/superglue/imodel/superpoint-512x640/superpoint-512x640_BY.raw"
+input = "./qtset/superpoint/0.png"
+backends = "BY,socket://ql100aiu@192.168.125.183:9981?npu=0x40000000&dma=0x80000000;Host"

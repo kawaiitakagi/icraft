@@ -1,0 +1,44 @@
+[parse]
+net_name = "GazeTR"
+framework = "Pytorch"
+inputs = [ 1, 224, 224, 3]
+inputs_layout = "NHWC"
+pre_method = "nop"
+pre_scale = [ 255.0, 255.0, 255.0]
+pre_mean = [ 0.0, 0.0, 0.0]
+channel_swap = [ 2, 1, 0]
+network = "fmodel/GazeTR_1x3x224x224.pt"
+jr_path = "../3_deploy/modelzoo/GazeTR/imodel/16/"
+frame_version = "1.9"
+
+[optimize]
+target = "BUYI"
+json = "../3_deploy/modelzoo/GazeTR/imodel/16/GazeTR_parsed.json"
+raw = "../3_deploy/modelzoo/GazeTR/imodel/16/GazeTR_parsed.raw"
+jr_path = "../3_deploy/modelzoo/GazeTR/imodel/16/"
+
+[quantize]
+forward_mode = "image"
+saturation = "ems"
+forward_dir = "./qtset/GazeTR"
+forward_list = "./qtset/GazeTR.txt"
+bits = 16
+json = "../3_deploy/modelzoo/GazeTR/imodel/16/GazeTR_optimized.json"
+raw = "../3_deploy/modelzoo/GazeTR/imodel/16/GazeTR_optimized.raw"
+jr_path = "../3_deploy/modelzoo/GazeTR/imodel/16/"
+per = "tensor"
+target = "buyi"
+
+[adapt]
+target = "BUYI"
+json = "../3_deploy/modelzoo/GazeTR/imodel/16/GazeTR_quantized.json"
+raw = "../3_deploy/modelzoo/GazeTR/imodel/16/GazeTR_quantized.raw"
+jr_path = "../3_deploy/modelzoo/GazeTR/imodel/16/"
+pass_on =  "customop.ImageMakePass"
+custom_config = "config/customop/GazeTR.toml"
+
+[generate]
+json = "../3_deploy/modelzoo/GazeTR/imodel/16/GazeTR_adapted.json"
+raw = "../3_deploy/modelzoo/GazeTR/imodel/16/GazeTR_adapted.raw"
+jr_path = "../3_deploy/modelzoo/GazeTR/imodel/16/"
+

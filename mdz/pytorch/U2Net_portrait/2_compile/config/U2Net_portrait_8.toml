@@ -1,0 +1,53 @@
+[parse]
+net_name = "U2Net_portrait"
+framework = "pytorch"
+inputs = [ 1, 512, 512, 3]
+inputs_layout = "NHWC"
+pre_method = "resize"
+pre_scale = [ 58.395, 57.12, 57.375]
+pre_mean = [ 123.675, 116.28, 103.53]
+channel_swap = [0, 1, 2]
+network = "./fmodel/u2net_portrait_512x512_traced_new.pt"
+jr_path = "../3_deploy/modelzoo/U2Net_portrait/imodel/8/"
+frame_version = "1.9"
+
+[optimize]
+target = "BUYI"
+json = "../3_deploy/modelzoo/U2Net_portrait/imodel/8/U2Net_portrait_parsed.json"
+raw = "../3_deploy/modelzoo/U2Net_portrait/imodel/8/U2Net_portrait_parsed.raw"
+jr_path = "../3_deploy/modelzoo/U2Net_portrait/imodel/8/"
+
+[quantize]
+forward_mode = "image"
+saturation = "kld"
+forward_dir = "./qtset/coco"
+forward_list = "./qtset/coco.txt"
+bits = 8
+json = "../3_deploy/modelzoo/U2Net_portrait/imodel/8/U2Net_portrait_optimized.json"
+raw = "../3_deploy/modelzoo/U2Net_portrait/imodel/8/U2Net_portrait_optimized.raw"
+jr_path = "../3_deploy/modelzoo/U2Net_portrait/imodel/8/"
+per = "tensor"
+target = "buyi"
+
+[adapt]
+target = "BUYI"
+json = "../3_deploy/modelzoo/U2Net_portrait/imodel/8/U2Net_portrait_quantized.json"
+raw = "../3_deploy/modelzoo/U2Net_portrait/imodel/8/U2Net_portrait_quantized.raw"
+jr_path = "../3_deploy/modelzoo/U2Net_portrait/imodel/8/"
+pass_on =  "customop.ImageMakePass"
+custom_config = "config/customop/U2Net.toml"
+
+[generate]
+json = "../3_deploy/modelzoo/U2Net_portrait/imodel/8/U2Net_portrait_adapted.json"
+raw = "../3_deploy/modelzoo/U2Net_portrait/imodel/8/U2Net_portrait_adapted.raw"
+jr_path = "../3_deploy/modelzoo/U2Net_portrait/imodel/8/"
+log_path = "./logs/"
+
+[run]
+log_time = true
+log_io = true
+dump_format = "SFB"
+json = "../3_deploy/modelzoo/U2Net_portrait/imodel/8/U2Net_portrait_BY.json"
+raw = "../3_deploy/modelzoo/U2Net_portrait/imodel/8/U2Net_portrait_BY.raw"
+input = "./qtset/coco/000000000139.jpg"
+log_path = "./logs/"

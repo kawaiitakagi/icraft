@@ -1,0 +1,47 @@
+[parse]
+net_name = "siamrpn++_net2"
+framework = "pytorch"
+inputs = [ [1,255,255,3],[256,1,5,5],[256,1,5,5],[256,1,5,5],[256,1,5,5],[256,1,5,5],[256,1,5,5]]
+inputs_layout = "NHWC;FD;FD;FD;FD;FD;FD"
+pre_method = "resize;nop;nop;nop;nop;nop;nop"
+pre_scale = "nop;nop;nop;nop;nop;nop;nop"
+pre_mean = "nop;nop;nop;nop;nop;nop;nop"
+channel_swap = "nop;nop;nop;nop;nop;nop;nop"
+network = "./fmodel/siamrpn++-net-2-255x255.pt"
+jr_path = "../3_deploy/modelzoo/siamrpn++/imodel/8_siamrpn++_net2/"
+frame_version = "1.9"
+
+[optimize]
+target = "BUYI"
+json = "../3_deploy/modelzoo/siamrpn++/imodel/8_siamrpn++_net2/siamrpn++_net2_parsed.json"
+raw = "../3_deploy/modelzoo/siamrpn++/imodel/8_siamrpn++_net2/siamrpn++_net2_parsed.raw"
+jr_path = "../3_deploy/modelzoo/siamrpn++/imodel/8_siamrpn++_net2/"
+
+[quantize]
+forward_mode = "image"
+saturation = "kld"
+forward_dir = "./qtset/siamrpn++"
+forward_list = "./qtset/siamrpn++.txt"
+bits = 8
+json = "../3_deploy/modelzoo/siamrpn++/imodel/8_siamrpn++_net2/siamrpn++_net2_optimized.json"
+raw = "../3_deploy/modelzoo/siamrpn++/imodel/8_siamrpn++_net2/siamrpn++_net2_optimized.raw"
+jr_path = "../3_deploy/modelzoo/siamrpn++/imodel/8_siamrpn++_net2/"
+per = "tensor"
+target = "buyi"
+no_imagemake = "1,2,3,4,5,6"
+no_transinput = "1,2,3,4,5,6"
+
+
+[adapt]
+target = "BUYI"
+json = "../3_deploy/modelzoo/siamrpn++/imodel/8_siamrpn++_net2/siamrpn++_net2_quantized.json"
+raw = "../3_deploy/modelzoo/siamrpn++/imodel/8_siamrpn++_net2/siamrpn++_net2_quantized.raw"
+jr_path = "../3_deploy/modelzoo/siamrpn++/imodel/8_siamrpn++_net2/"
+pass_on =  "customop.ImageMakePass"
+custom_config = "./config/customop/siamrpn++.toml"
+
+[generate]
+json = "../3_deploy/modelzoo/siamrpn++/imodel/8_siamrpn++_net2/siamrpn++_net2_adapted.json"
+raw = "../3_deploy/modelzoo/siamrpn++/imodel/8_siamrpn++_net2/siamrpn++_net2_adapted.raw"
+jr_path = "../3_deploy/modelzoo/siamrpn++/imodel/8_siamrpn++_net2/"
+log_path = "./logs/"

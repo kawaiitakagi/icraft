@@ -1,0 +1,6 @@
+[ImageMake]
+forward_dll = ""
+forward_so = ""
+no_imkpad = 1 #imk不进行pad
+#mode = 1
+quantized = true

@@ -1,0 +1,54 @@
+[parse]
+net_name = "MMPSPNet"
+framework = "pytorch"
+inputs = [ 1, 1024, 2048, 3]
+inputs_layout = "NHWC"
+pre_method = "resize"
+pre_scale = [ 58.395, 57.12, 57.375]
+pre_mean = [ 123.675, 116.28, 103.53]
+channel_swap = [0, 1, 2]
+network = "fmodel/mmpspnet_traced_1024x2048.pt"
+jr_path = "../3_deploy/modelzoo/MMPSPNet/imodel/8/"
+frame_version = "1.9"
+
+[optimize]
+target = "BUYI"
+json = "../3_deploy/modelzoo/MMPSPNet/imodel/8/MMPSPNet_parsed.json"
+raw = "../3_deploy/modelzoo/MMPSPNet/imodel/8/MMPSPNet_parsed.raw"
+jr_path = "../3_deploy/modelzoo/MMPSPNet/imodel/8/"
+
+[quantize]
+forward_mode = "image"
+saturation = "kld"
+forward_dir = "./qtset/cityscapes"
+forward_list = "./qtset/cityscapes.txt"
+bits = 8
+json = "../3_deploy/modelzoo/MMPSPNet/imodel/8/MMPSPNet_optimized.json"
+raw = "../3_deploy/modelzoo/MMPSPNet/imodel/8/MMPSPNet_optimized.raw"
+jr_path = "../3_deploy/modelzoo/MMPSPNet/imodel/8/"
+per = "tensor"
+target = "buyi"
+
+[adapt]
+target = "BUYI"
+json = "../3_deploy/modelzoo/MMPSPNet/imodel/8/MMPSPNet_quantized.json"
+raw = "../3_deploy/modelzoo/MMPSPNet/imodel/8/MMPSPNet_quantized.raw"
+jr_path = "../3_deploy/modelzoo/MMPSPNet/imodel/8/"
+pass_on =  "customop.ImageMakePass"
+custom_config = "config/customop/MMPSPNet.toml"
+
+[generate]
+json = "../3_deploy/modelzoo/MMPSPNet/imodel/8/MMPSPNet_adapted.json"
+raw = "../3_deploy/modelzoo/MMPSPNet/imodel/8/MMPSPNet_adapted.raw"
+jr_path = "../3_deploy/modelzoo/MMPSPNet/imodel/8/"
+log_path = "./logs/"
+ocmopt = 0
+
+[run]
+log_time = true
+log_io = true
+dump_format = "SFB"
+json = "../3_deploy/modelzoo/MMPSPNet/imodel/8/MMPSPNet_BY.json"
+raw = "../3_deploy/modelzoo/MMPSPNet/imodel/8/MMPSPNet_BY.raw"
+input = "./qtset/cityscapes/frankfurt_000000_000294_leftImg8bit.png"
+log_path = "./logs/"

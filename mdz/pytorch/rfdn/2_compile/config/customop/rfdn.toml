@@ -1,0 +1,4 @@
+[ImageMake]
+forward_dll = ""
+forward_so = ""
+no_imkpad = 1

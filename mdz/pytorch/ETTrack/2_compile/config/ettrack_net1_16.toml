@@ -1,0 +1,48 @@
+[parse]
+net_name = "ettrack_net1"
+framework = "pytorch"
+inputs = [ 1,127, 127,3]
+inputs_layout = "NHWC"
+pre_method = "nop"
+#post_method = "nop"
+pre_scale = [58.395,57.12,57.375]
+pre_mean = [123.675,116.28,103.53]
+channel_swap = [ 0, 1, 2]#rgb
+network = "fmodel/ettrack_net1_1x3x127x127_traced.pt"
+jr_path = "../3_deploy/modelzoo/ETTrack/imodel/16_ettrack_net1/"
+frame_version = "1.9"
+
+[optimize]
+target = "BUYI"
+json = "../3_deploy/modelzoo/ETTrack/imodel/16_ettrack_net1/ettrack_net1_parsed.json"
+raw = "../3_deploy/modelzoo/ETTrack/imodel/16_ettrack_net1/ettrack_net1_parsed.raw"
+jr_path = "../3_deploy/modelzoo/ETTrack/imodel/16_ettrack_net1/"
+pass_on = "icraft.ConvertDimFreeOpLayoutPass"
+
+[quantize]
+forward_mode = "image"
+saturation = "kld"
+forward_dir = "./qtset/ettrack_5seqs_per100"
+forward_list = "./qtset/ettrack_net1_5seqs_per100.txt"
+bits = 16
+json = "../3_deploy/modelzoo/ETTrack/imodel/16_ettrack_net1/ettrack_net1_optimized.json"
+raw = "../3_deploy/modelzoo/ETTrack/imodel/16_ettrack_net1/ettrack_net1_optimized.raw"
+jr_path = "../3_deploy/modelzoo/ETTrack/imodel/16_ettrack_net1/"
+per = "channel"
+target = "buyi"
+
+[adapt]
+target = "BUYI"
+json = "../3_deploy/modelzoo/ETTrack/imodel/16_ettrack_net1/ettrack_net1_quantized.json"
+raw =  "../3_deploy/modelzoo/ETTrack/imodel/16_ettrack_net1/ettrack_net1_quantized.raw"
+jr_path = "../3_deploy/modelzoo/ETTrack/imodel/16_ettrack_net1/"
+pass_on =  "customop.ImageMakePass"
+custom_config = "./config/customop/ettrack.toml"
+
+[generate]
+json = "../3_deploy/modelzoo/ETTrack/imodel/16_ettrack_net1/ettrack_net1_adapted.json"
+raw =  "../3_deploy/modelzoo/ETTrack/imodel/16_ettrack_net1/ettrack_net1_adapted.raw"
+jr_path = "../3_deploy/modelzoo/ETTrack/imodel/16_ettrack_net1/"
+log_path = "./logs/"
+ocmopt = 0
+

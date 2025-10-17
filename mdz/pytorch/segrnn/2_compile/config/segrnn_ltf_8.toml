@@ -1,0 +1,46 @@
+[parse]
+net_name = 'segrnn_ltf'
+framework = 'pytorch'
+inputs = [[1,7,96],[28,1,512],[1,7,512]]
+inputs_layout = 'FD;FD;FD'
+pre_method = 'nop;nop;nop'
+pre_mean = 'nop;nop;nop'
+pre_scale = 'nop;nop;nop'
+channel_swap = 'nop;nop;nop'
+network = 'fmodel/segrnn_ltf.pt'
+jr_path = '../3_deploy/modelzoo/segrnn/imodel/ltf/8/' 
+frame_version = '1.9'
+
+[optimize]
+target = 'BUYI'
+json = '../3_deploy/modelzoo/segrnn/imodel/ltf/8/segrnn_ltf_parsed.json'
+raw = '../3_deploy/modelzoo/segrnn/imodel/ltf/8/segrnn_ltf_parsed.raw'
+jr_path = '../3_deploy/modelzoo/segrnn/imodel/ltf/8/' 
+pass_off ="icraft.RemoveUselessMaxpoolPass"
+
+[quantize]
+forward_mode = 'image'
+saturation = 'kld'
+forward_dir = 'qtset/ltf'
+forward_list = 'qtset/ltf.txt'
+bits = 8
+json = '../3_deploy/modelzoo/segrnn/imodel/ltf/8/segrnn_ltf_optimized.json'
+raw = '../3_deploy/modelzoo/segrnn/imodel/ltf/8/segrnn_ltf_optimized.raw'
+jr_path = '../3_deploy/modelzoo/segrnn/imodel/ltf/8/' 
+per = 'tensor'
+target = "buyi"
+
+[adapt]
+target = 'BUYI'
+json = '../3_deploy/modelzoo/segrnn/imodel/ltf/8/segrnn_ltf_quantized.json'
+raw = '../3_deploy/modelzoo/segrnn/imodel/ltf/8/segrnn_ltf_quantized.raw'
+jr_path = '../3_deploy/modelzoo/segrnn/imodel/ltf/8/' 
+
+[generate]
+json = '../3_deploy/modelzoo/segrnn/imodel/ltf/8/segrnn_ltf_adapted.json'
+raw = '../3_deploy/modelzoo/segrnn/imodel/ltf/8/segrnn_ltf_adapted.raw'
+jr_path = '../3_deploy/modelzoo/segrnn/imodel/ltf/8/' 
+log_path = './logs/'
+
+
+

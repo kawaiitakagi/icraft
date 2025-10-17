@@ -1,0 +1,30 @@
+
+  # "p": "parsed",
+  # "o": "optimized",
+  # "q": "quantized",
+  # "a": "adapted",
+  # "g": "BY",
+imodel: 
+  cudamode: false  
+  mmu: true
+  speedmode: false
+  compressFtmp: false
+  dir: ../imodel/8
+  stage: g
+  sim: false
+  ip: 192.168.125.184
+  save: true
+  show: true
+  metricRes: true
+ 
+dataset:
+  dir: ../../../../1_scripts/Data/ModelNet40
+  list: ../io/list.txt
+  names: ../names/modelnet40.names
+  res: ../io/output
+param:
+  number_of_class: 40
+camera:
+  do: true
+  camerah: 1080
+  cameraw: 1920

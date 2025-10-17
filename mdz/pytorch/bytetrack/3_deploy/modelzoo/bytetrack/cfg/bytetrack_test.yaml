@@ -1,0 +1,39 @@
+
+  # "p": "parsed",
+  # "o": "optimized",
+  # "q": "quantized",
+  # "a": "adapted",
+  # "g": "BY",
+imodel: 
+  cudamode: false  
+  mmu: true
+  speedmode: false
+  compressFtmp: false
+  dir: ../imodel/8
+  stage: g
+  sim: false
+  ip: 192.168.125.185
+  save: true
+  show: false
+
+
+dataset:
+  dir: D:/code/dataset/MOT17/MOT17/train/
+  list: D:/code/dataset/MOT17/MOT17/val_list.txt
+  names: ../names/mot17-08.names
+  res: ../io/metric_BY_8bit/
+  
+
+param:
+  conf: 0.01
+  iou_thresh: 0.7
+  multilabel: true
+  number_of_class: 1
+  number_of_head: 3
+  anchors: []
+  fpga_nms: false
+
+camera:
+  do: true
+  camerah: 1080
+  cameraw: 1920

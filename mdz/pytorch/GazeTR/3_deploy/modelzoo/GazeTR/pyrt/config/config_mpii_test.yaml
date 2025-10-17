@@ -1,0 +1,23 @@
+---
+test:
+
+    load:
+        begin_step: 80
+        end_step: 80
+        steps: 10
+
+    data: 
+        image: "D:/code/dataset/FaceBased/MPIIFaceGaze_test/Image/"
+        label: "D:/code/dataset/FaceBased/MPIIFaceGaze_test/Label/"
+        name: mpii
+        header: True
+        isFolder: True
+
+    savename: "evaluation"
+
+    device: -1  #0
+
+    reader: reader
+
+# dropout = 0
+# dim_feed = 512

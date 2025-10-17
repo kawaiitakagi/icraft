@@ -1,0 +1,28 @@
+
+  # "p": "parsed",
+  # "o": "optimized",
+  # "q": "quantized",
+  # "a": "adapted",
+  # "g": "BY",
+imodel: 
+  mmu: true
+  speedmode: false
+  compressFtmp: false
+  dir: ../imodel/16
+  stage: g
+  sim: false
+  ip: 192.168.125.184
+  save: true
+  show: true
+  timeRes: false
+dataset:
+  dir: ./dataset/cn-celeb-test
+  list: ./dataset/cn-celeb-test/trials_list_features.txt
+  res: ../io/output
+param:
+  thr: 0.7
+
+camera:
+  do: true
+  camerah: 1080
+  cameraw: 1920

@@ -1,0 +1,11 @@
+tqdm
+numpy
+matplotlib
+torch
+torchvision
+timm==0.6.13
+openpyxl==3.1.2
+pandas==1.3.5
+PyYAML==6.0.2
+prefetch_generator
+scikit-learn

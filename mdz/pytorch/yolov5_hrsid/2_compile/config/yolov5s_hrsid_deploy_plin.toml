@@ -1,0 +1,56 @@
+[parse]
+net_name = "yolov5_hrsid"
+framework = "pytorch"
+inputs = [ 1, 352, 640, 1]
+inputs_layout = "NHWC"
+pre_method = "nop"
+pre_scale = [255]
+pre_mean = [0]
+channel_swap = [0]
+network = "fmodel/yolov5_hrsid_352x640.pt"
+jr_path = "../3_deploy/modelzoo/yolov5_hrsid/imodel/plin/"
+frame_version = "1.9"
+
+[optimize]
+target = "BUYI"
+json = "../3_deploy/modelzoo/yolov5_hrsid/imodel/plin/yolov5_hrsid_parsed.json"
+raw = "../3_deploy/modelzoo/yolov5_hrsid/imodel/plin/yolov5_hrsid_parsed.raw"
+jr_path = "../3_deploy/modelzoo/yolov5_hrsid/imodel/plin/"
+
+[quantize]
+forward_mode = "image"
+saturation = "kld"
+forward_dir = "./qtset/hrsid"
+forward_list = "./qtset/hrsid.txt"
+bits = 8
+json = "../3_deploy/modelzoo/yolov5_hrsid/imodel/plin/yolov5_hrsid_optimized.json"
+raw = "../3_deploy/modelzoo/yolov5_hrsid/imodel/plin/yolov5_hrsid_optimized.raw"
+jr_path = "../3_deploy/modelzoo/yolov5_hrsid/imodel/plin/"
+per = "tensor"
+target = "buyi"
+decode_dll = "dll/customop.SingleChannelDecoder.dll"
+
+[adapt]
+target = "BUYI"
+json = "../3_deploy/modelzoo/yolov5_hrsid/imodel/plin/yolov5_hrsid_quantized.json"
+raw = "../3_deploy/modelzoo/yolov5_hrsid/imodel/plin/yolov5_hrsid_quantized.raw"
+jr_path = "../3_deploy/modelzoo/yolov5_hrsid/imodel/plin/"
+pass_on =  "customop.ImageMakePass,customop.DetPostPass"
+custom_config = "config/customop/yolov5_hrsid.toml"
+
+[generate]
+json = "../3_deploy/modelzoo/yolov5_hrsid/imodel/plin/yolov5_hrsid_adapted.json"
+raw = "../3_deploy/modelzoo/yolov5_hrsid/imodel/plin/yolov5_hrsid_adapted.raw"
+jr_path = "../3_deploy/modelzoo/yolov5_hrsid/imodel/plin/"
+log_path = "./logs/"
+no_mergeops = true
+etmopt = 0
+
+[run]
+log_time = true
+log_io = true
+dump_format = "SFB"
+json = "../3_deploy/modelzoo/yolov5_hrsid/imodel/plin/yolov5_hrsid_BY.json"
+raw = "../3_deploy/modelzoo/yolov5_hrsid/imodel/plin/yolov5_hrsid_BY.raw"
+input = "./qtset/hrsid/test_0.jpg"
+log_path = "./logs/"

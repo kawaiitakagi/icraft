@@ -1,0 +1,35 @@
+
+  # "p": "parsed",
+  # "o": "optimized",
+  # "q": "quantized",
+  # "a": "adapted",
+  # "g": "BY",
+imodel: 
+  cudamode: false  
+  mmu: true
+  speedmode: false
+  compressFtmp: false
+  dir: ../imodel/ltf/16
+  stage: g
+  sim: false
+  ip: 192.168.124.134
+  save: true
+  show: true
+ 
+dataset:
+  data_dir: ../io/ltf/input
+  label_dir: ../io/ltf/label
+  list: ../io/ltf/moderntcn_ltf_input.txt
+  res: ../io/ltf/output
+
+param:
+  task: long_term_forecast
+  label_len: 144
+  seq_len: 336
+  dec_in: 7
+  pre_len: 96
+  dec_out: 7
+camera:
+  do: true
+  camerah: 1080
+  cameraw: 1920

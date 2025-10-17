@@ -1,0 +1,22 @@
+# release添加
+**/0_*/*
+/*/*/*.yaml
+
+# 原dev
+#2_compile
+**/fmodel/*
+**/imodel/*
+**/logs/*
+**/qtset/*
+weights/*
+#3_deploy
+**/build/*
+**/io/*
+**/Deps_*/*
+**/onnxruntime/*
+!.gitkeep
+
+# release添加
+!download.py
+!download.sh
+**/modelzoo/LICENSE

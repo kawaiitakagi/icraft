@@ -1,0 +1,59 @@
+[parse]
+net_name = "edsr_gelu_160x240"
+framework = "pytorch"
+inputs = [ 1, 160, 240, 3]
+inputs_layout = "NHWC"
+pre_method = "nop"
+pre_scale = "nop"
+pre_mean = "nop"
+channel_swap = [0, 1, 2]
+network = "../2_compile/fmodel/edsr_gelu_160x240.pt"
+jr_path = "../3_deploy/modelzoo/edsr/imodel/8/"
+frame_version = "1.9"
+
+[optimize]
+target = "BUYI"
+json = "../3_deploy/modelzoo/edsr/imodel/8/edsr_gelu_160x240_parsed.json"
+raw = "../3_deploy/modelzoo/edsr/imodel/8/edsr_gelu_160x240_parsed.raw"
+jr_path = "../3_deploy/modelzoo/edsr/imodel/8/"
+# pass_off = "icraft.MergeConv2dBatchnormPass"
+pass_off = "icraft.MergeMultiply2Conv2dPass"
+
+[quantize]
+forward_mode = "image"
+saturation = "null"
+forward_dir = "./qtset/sr"
+forward_list = "./qtset/sr.txt"
+bits = 8
+json = "../3_deploy/modelzoo/edsr/imodel/8/edsr_gelu_160x240_optimized.json"
+raw = "../3_deploy/modelzoo/edsr/imodel/8/edsr_gelu_160x240_optimized.raw"
+jr_path = "../3_deploy/modelzoo/edsr/imodel/8/"
+per = "tensor"
+# per = "channel"
+target = "buyi"
+no_transinput = true
+# mix_precision = "auto"
+
+[adapt]
+target = "BUYI"
+json = "../3_deploy/modelzoo/edsr/imodel/8/edsr_gelu_160x240_quantized.json"
+raw = "../3_deploy/modelzoo/edsr/imodel/8/edsr_gelu_160x240_quantized.raw"
+jr_path = "../3_deploy/modelzoo/edsr/imodel/8/"
+pass_on =  "customop.ImageMakePass"
+custom_config = "config/customop/edsr.toml"
+
+[generate]
+json = "../3_deploy/modelzoo/edsr/imodel/8/edsr_gelu_160x240_adapted.json"
+raw = "../3_deploy/modelzoo/edsr/imodel/8/edsr_gelu_160x240_adapted.raw"
+jr_path = "../3_deploy/modelzoo/edsr/imodel/8/"
+log_path = "./logs/"
+# ocmopt = "0"
+
+[run]
+log_time = true
+log_io = true
+dump_format = "SFB"
+json = "../3_deploy/modelzoo/edsr/imodel/8/edsr_gelu_160x240_BY.json"
+raw = "../3_deploy/modelzoo/edsr/imodel/8/edsr_gelu_160x240_BY.raw"
+input = "./qtset/sr/3096x2.png"
+log_path = "./logs/"

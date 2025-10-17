@@ -1,0 +1,44 @@
+[parse]
+net_name = "MPIIFaceGaze"
+framework = "onnx"
+inputs = [ 1, 224, 224, 3]
+inputs_layout = "NHWC"
+pre_method = "resize"
+pre_scale = [58.395,57.12,57.375]
+pre_mean = [123.675,116.28,103.53]
+channel_swap = [0,1,2]
+network = "fmodel/MPIIFaceGaze_1x3x224x224.onnx"
+jr_path = "../3_deploy/modelzoo/MPIIFaceGaze/imodel/16/"
+
+
+[optimize]
+target = "BUYI"
+json = "../3_deploy/modelzoo/MPIIFaceGaze/imodel/16/MPIIFaceGaze_parsed.json"
+raw = "../3_deploy/modelzoo/MPIIFaceGaze/imodel/16/MPIIFaceGaze_parsed.raw"
+jr_path = "../3_deploy/modelzoo/MPIIFaceGaze/imodel/16/"
+
+[quantize]
+forward_mode = "image"
+saturation = "null"
+forward_dir = "./qtset/MPIIFaceGaze"
+forward_list = "./qtset/MPIIFaceGaze.txt"
+bits = 16
+json = "../3_deploy/modelzoo/MPIIFaceGaze/imodel/16/MPIIFaceGaze_optimized.json"
+raw = "../3_deploy/modelzoo/MPIIFaceGaze/imodel/16/MPIIFaceGaze_optimized.raw"
+jr_path = "../3_deploy/modelzoo/MPIIFaceGaze/imodel/16/"
+per = "channel"
+target = "buyi"
+
+[adapt]
+target = "BUYI"
+json = "../3_deploy/modelzoo/MPIIFaceGaze/imodel/16/MPIIFaceGaze_quantized.json"
+raw = "../3_deploy/modelzoo/MPIIFaceGaze/imodel/16/MPIIFaceGaze_quantized.raw"
+jr_path = "../3_deploy/modelzoo/MPIIFaceGaze/imodel/16/"
+pass_on =  "customop.ImageMakePass"
+custom_config = "config/customop/MPIIFaceGaze.toml"
+
+[generate]
+json = "../3_deploy/modelzoo/MPIIFaceGaze/imodel/16/MPIIFaceGaze_adapted.json"
+raw = "../3_deploy/modelzoo/MPIIFaceGaze/imodel/16/MPIIFaceGaze_adapted.raw"
+jr_path = "../3_deploy/modelzoo/MPIIFaceGaze/imodel/16/"
+

@@ -1,0 +1,30 @@
+
+  # "p": "parsed",
+  # "o": "optimized",
+  # "q": "quantized",
+  # "a": "adapted",
+  # "g": "BY",
+imodel: 
+  cudamode: false  
+  mmu: true
+  speedmode: false
+  compressFtmp: false
+  dir: ../imodel/8/
+  stage: g
+  sim: false
+  ip: 192.168.125.185
+  save: true
+  show: false
+  calctime: false
+ 
+dataset:
+  dir: D:/code/VOT/dataset/LaSOT/test 
+  list: D:/code/VOT/dataset/LaSOT/Lasot_sub62.txt
+  res: ../io/output_lasot_8bit/
+
+param:
+
+camera:
+  do: true
+  camerah: 1080
+  cameraw: 1920

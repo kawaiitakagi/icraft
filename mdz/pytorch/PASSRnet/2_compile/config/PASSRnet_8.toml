@@ -1,0 +1,58 @@
+[parse]
+net_name = "PASSRnet"
+framework = "pytorch"
+inputs = [[ 1, 125, 178, 3],[ 1, 125, 178, 3]]
+inputs_layout = "NHWC;NHWC"
+pre_method = "nop;nop"
+#pre_scale = "nop;nop"
+#pre_mean = "nop;nop"
+pre_scale = [[ 255.0, 255.0, 255.0],[ 255.0, 255.0, 255.0]]
+pre_mean = [[ 0.0, 0.0, 0.0],[ 0.0, 0.0, 0.0]]
+channel_swap = [[0,1,2],[0,1,2]]
+network = "./fmodel/PASSRnet_traced_1x3x125x178.pt"
+jr_path = "../3_deploy/modelzoo/PASSRnet/imodel/8/"
+frame_version = "1.9"
+
+[optimize]
+target = "BUYI"
+json = "../3_deploy/modelzoo/PASSRnet/imodel/8/PASSRnet_parsed.json"
+raw = "../3_deploy/modelzoo/PASSRnet/imodel/8/PASSRnet_parsed.raw"
+jr_path = "../3_deploy/modelzoo/PASSRnet/imodel/8/"
+
+[quantize]
+forward_mode = "image"
+saturation = "null"
+forward_dir = "./qtset/PASSRnet/"
+forward_list = "./qtset/PASSRnet.txt"
+bits = 8
+json = "../3_deploy/modelzoo/PASSRnet/imodel/8/PASSRnet_optimized.json"
+raw = "../3_deploy/modelzoo/PASSRnet/imodel/8/PASSRnet_optimized.raw"
+jr_path = "../3_deploy/modelzoo/PASSRnet/imodel/8/"
+per = "tensor"
+target = "buyi"
+no_imagemake = true
+no_transinput = true
+
+[adapt]
+target = "BUYI"
+json = "../3_deploy/modelzoo/PASSRnet/imodel/8/PASSRnet_quantized.json"
+raw = "../3_deploy/modelzoo/PASSRnet/imodel/8/PASSRnet_quantized.raw"
+jr_path = "../3_deploy/modelzoo/PASSRnet/imodel/8/"
+#pass_on =  "customop.ImageMakePass"
+#custom_config = "config/customop/PASSRnet.toml"
+
+[generate]
+json = "../3_deploy/modelzoo/PASSRnet/imodel/8/PASSRnet_adapted.json"
+raw = "../3_deploy/modelzoo/PASSRnet/imodel/8/PASSRnet_adapted.raw"
+jr_path = "../3_deploy/modelzoo/PASSRnet/imodel/8/"
+log_path = "./logs/"
+
+
+[run]
+log_time = true
+log_io = true
+dump_format = "SFB"
+json = "../3_deploy/modelzoo/PASSRnet/imodel/8/PASSRnet_BY.json"
+raw = "../3_deploy/modelzoo/PASSRnet/imodel/8/PASSRnet_BY.raw"
+input = "./qtset/PASSRnet/lr0.png;./qtset/PASSRnet/lr1.png"
+log_path = "./logs/"

@@ -1,0 +1,36 @@
+
+  # "p": "parsed",
+  # "o": "optimized",
+  # "q": "quantized",
+  # "a": "adapted",
+  # "g": "BY",
+imodel: 
+  cudamode: false  
+  mmu: true
+  speedmode: false
+  compressFtmp: false
+  dir: ../imodel/8
+  stage: g
+  sim: true
+  ip: 192.168.125.89
+  save: true
+  show: true
+ 
+dataset:
+  dir: ../io/input
+  list: ../io/list.txt
+  names: ../names/coco.names
+  res: ../io/output
+
+param:
+  conf: 0.25
+  iou_thresh: 0.45
+  multilabel: true
+  number_of_class: 80
+  anchors: [[[10.,13.],[16.,30.],[33.,23.]],[[30.,61.],[62.,45.],[59.,119.]],[[116.,90.],[156.,198.],[373.,326.]]]
+  fpga_nms: true
+
+camera:
+  do: true
+  camerah: 1080
+  cameraw: 1920

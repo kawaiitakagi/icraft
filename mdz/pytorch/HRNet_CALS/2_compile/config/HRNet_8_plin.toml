@@ -1,0 +1,47 @@
+[parse]
+net_name = "HRNet"
+framework = "pytorch"
+inputs = [ 1, 540, 540, 3]
+inputs_layout = "NHWC"
+pre_method = "resize"
+pre_scale = [ 58.395, 57.12, 57.375]
+pre_mean = [ 123.675, 116.28, 103.53]
+channel_swap = [ 2,1,0]
+network = "./fmodel/HRNet_540_s_icraft_traced.pt"
+jr_path = "../3_deploy/modelzoo/HRNet_CALS/imodel/8_plin/"
+frame_version = "1.9"
+
+[optimize]
+target = "BUYI"
+json = "../3_deploy/modelzoo/HRNet_CALS/imodel/8_plin/HRNet_parsed.json"
+raw = "../3_deploy/modelzoo/HRNet_CALS/imodel/8_plin/HRNet_parsed.raw"
+jr_path = "../3_deploy/modelzoo/HRNet_CALS/imodel/8_plin/"
+
+[quantize]
+forward_mode = "image"
+saturation = "null"
+forward_dir = "./qtset/DCS"
+forward_list = "./qtset/DCS.txt"
+bits = 8
+json = "../3_deploy/modelzoo/HRNet_CALS/imodel/8_plin/HRNet_optimized.json"
+raw = "../3_deploy/modelzoo/HRNet_CALS/imodel/8_plin/HRNet_optimized.raw"
+jr_path = "../3_deploy/modelzoo/HRNet_CALS/imodel/8_plin/"
+per = "channel"
+target = "buyi"
+
+
+[adapt]
+target = "BUYI"
+json = "../3_deploy/modelzoo/HRNet_CALS/imodel/8_plin/HRNet_quantized.json"
+raw = "../3_deploy/modelzoo/HRNet_CALS/imodel/8_plin/HRNet_quantized.raw"
+jr_path = "../3_deploy/modelzoo/HRNet_CALS/imodel/8_plin/"
+pass_on =  "customop.ImageMakePass"
+custom_config = "config/customop/HRNet.toml"
+
+[generate]
+json = "../3_deploy/modelzoo/HRNet_CALS/imodel/8_plin/HRNet_adapted.json"
+raw = "../3_deploy/modelzoo/HRNet_CALS/imodel/8_plin/HRNet_adapted.raw"
+jr_path = "../3_deploy/modelzoo/HRNet_CALS/imodel/8_plin/"
+log_path = "./logs/"
+
+

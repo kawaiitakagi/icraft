@@ -1,0 +1,23 @@
+loading annotations into memory...
+Done (t=0.26s)
+creating index...
+index created!
+Loading and preparing results...
+DONE (t=0.92s)
+creating index...
+index created!
+Running per image evaluation...
+Evaluate annotation type *keypoints*
+DONE (t=4.23s).
+Accumulating evaluation results...
+DONE (t=0.21s).
+ Average Precision  (AP) @[ IoU=0.50:0.95 | area=   all | maxDets= 20 ] = 0.58432
+ Average Precision  (AP) @[ IoU=0.50      | area=   all | maxDets= 20 ] = 0.84453
+ Average Precision  (AP) @[ IoU=0.75      | area=   all | maxDets= 20 ] = 0.64450
+ Average Precision  (AP) @[ IoU=0.50:0.95 | area=medium | maxDets= 20 ] = 0.50383
+ Average Precision  (AP) @[ IoU=0.50:0.95 | area= large | maxDets= 20 ] = 0.69642
+ Average Recall     (AR) @[ IoU=0.50:0.95 | area=   all | maxDets= 20 ] = 0.64954
+ Average Recall     (AR) @[ IoU=0.50      | area=   all | maxDets= 20 ] = 0.88948
+ Average Recall     (AR) @[ IoU=0.75      | area=   all | maxDets= 20 ] = 0.70875
+ Average Recall     (AR) @[ IoU=0.50:0.95 | area=medium | maxDets= 20 ] = 0.57014
+ Average Recall     (AR) @[ IoU=0.50:0.95 | area= large | maxDets= 20 ] = 0.76094

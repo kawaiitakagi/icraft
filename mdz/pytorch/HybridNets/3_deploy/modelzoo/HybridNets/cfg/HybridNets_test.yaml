@@ -1,0 +1,28 @@
+
+  # "p": "parsed",
+  # "o": "optimized",
+  # "q": "quantized",
+  # "a": "adapted",
+  # "g": "BY",
+imodel: 
+  mmu: false
+  speedmode: true
+  compressFtmp: true
+  dir: ../imodel/8/
+  stage: g
+  sim: false
+  ip: 192.168.125.185
+  save: true
+  show: false
+ 
+dataset:
+  dir: D:/code/dataset/BDD100k/datasets/
+  res: ../io/output/metric/
+
+param:
+  multiclass: true
+
+camera:
+  do: true
+  camerah: 1080
+  cameraw: 1920

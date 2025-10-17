@@ -1,0 +1,31 @@
+
+  # "p": "parsed",
+  # "o": "optimized",
+  # "q": "quantized",
+  # "a": "adapted",
+  # "g": "BY",
+imodel: 
+  mmu: false
+  speedmode: true
+  compressFtmp: true
+  dir: ../imodel/TSN_25frames_psin_8bit/
+  stage: g
+  sim: false
+  ip: 192.168.125.185
+  save: true
+  show: true
+ 
+dataset:
+  dir: ../io/input/flipping_pancake/
+  res: ../io/output/imgs/
+  list: ../io/flipping_pancake.txt 
+  label_txt: ../io/kinetics_label_map_k400.txt
+
+param:
+  num_segments: 25
+
+
+camera:
+  do: true
+  camerah: 1080
+  cameraw: 1920

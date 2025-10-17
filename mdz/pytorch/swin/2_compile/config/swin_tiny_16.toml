@@ -1,0 +1,43 @@
+
+
+[parse]
+net_name = "swin"
+framework = "onnx"
+inputs = [ 1, 224, 224, 3]
+inputs_layout = "NHWC"
+pre_method = "nop"
+pre_scale = [58.395, 57.12, 57.375]
+pre_mean = [123.675, 116.28, 103.53]
+channel_swap = [0, 1, 2]
+network = "./fmodel/swin_tiny_224x224.onnx"
+jr_path = "../3_deploy/modelzoo/swin/imodel/16/"
+
+[optimize]
+target = "BUYI"
+json = "../3_deploy/modelzoo/swin/imodel/16/swin_parsed.json"
+raw = "../3_deploy/modelzoo/swin/imodel/16/swin_parsed.raw"
+jr_path = "../3_deploy/modelzoo/swin/imodel/16/"
+
+[quantize]
+forward_mode = "image"
+saturation = "ems"
+forward_dir = "./qtset/imagenet"
+forward_list = "./qtset/imagenet.txt"
+bits = 16
+json = "../3_deploy/modelzoo/swin/imodel/16/swin_optimized.json"
+raw = "../3_deploy/modelzoo/swin/imodel/16/swin_optimized.raw"
+jr_path = "../3_deploy/modelzoo/swin/imodel/16/"
+per = "channel"
+target = "buyi"
+
+[adapt]
+target = "BUYI"
+json = "../3_deploy/modelzoo/swin/imodel/16/swin_quantized.json"
+raw = "../3_deploy/modelzoo/swin/imodel/16/swin_quantized.raw"
+jr_path = "../3_deploy/modelzoo/swin/imodel/16/"
+pass_on =  "customop.ImageMakePass"
+custom_config = "config/customop/swin.toml"
+[generate]
+json = "../3_deploy/modelzoo/swin/imodel/16/swin_adapted.json"
+raw = "../3_deploy/modelzoo/swin/imodel/16/swin_adapted.raw"
+jr_path = "../3_deploy/modelzoo/swin/imodel/16/"

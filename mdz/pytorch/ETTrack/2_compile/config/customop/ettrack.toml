@@ -1,0 +1,9 @@
+[ImageMake]
+forward_dll = "C:/Icraft/CLI/bin/customop.ImageMake.dll"
+forward_so = ""
+no_imkpad = 1
+
+
+[InputFold]
+Meaningful_id = "0" #需要保留的ifm,提供常量折叠功能
+IfmsPath = "D:/code/VOT/model_zoo/MixformerV2/2_compile/qtset/ettrack_net2_foldparam.txt"

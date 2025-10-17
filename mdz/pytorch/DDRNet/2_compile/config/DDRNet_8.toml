@@ -1,0 +1,53 @@
+[parse]
+net_name = "DDRNet"
+framework = "pytorch"
+inputs = [ 1, 1024, 2048, 3]
+inputs_layout = "NHWC"
+pre_method = "resize"
+pre_scale = [ 58.395, 57.12, 57.375]
+pre_mean = [ 123.675, 116.28, 103.53]
+channel_swap = [0, 1, 2]
+network = "fmodel/DDRNet_1024x2048_traced.pt"
+jr_path = "../3_deploy/modelzoo/DDRNet/imodel/8/"
+frame_version = "1.9"
+
+[optimize]
+target = "BUYI"
+json = "../3_deploy/modelzoo/DDRNet/imodel/8/DDRNet_parsed.json"
+raw = "../3_deploy/modelzoo/DDRNet/imodel/8/DDRNet_parsed.raw"
+jr_path = "../3_deploy/modelzoo/DDRNet/imodel/8/"
+
+[quantize]
+forward_mode = "image"
+saturation = "kld"
+forward_dir = "./qtset/cityscapes"
+forward_list = "./qtset/cityscapes.txt"
+bits = 8
+json = "../3_deploy/modelzoo/DDRNet/imodel/8/DDRNet_optimized.json"
+raw = "../3_deploy/modelzoo/DDRNet/imodel/8/DDRNet_optimized.raw"
+jr_path = "../3_deploy/modelzoo/DDRNet/imodel/8/"
+per = "channel"
+target = "buyi"
+
+[adapt]
+target = "BUYI"
+json = "../3_deploy/modelzoo/DDRNet/imodel/8/DDRNet_quantized.json"
+raw = "../3_deploy/modelzoo/DDRNet/imodel/8/DDRNet_quantized.raw"
+jr_path = "../3_deploy/modelzoo/DDRNet/imodel/8/"
+pass_on =  "customop.ImageMakePass,customop.SegPostPass"
+custom_config = "config/customop/DDRNet.toml"
+
+[generate]
+json = "../3_deploy/modelzoo/DDRNet/imodel/8/DDRNet_adapted.json"
+raw = "../3_deploy/modelzoo/DDRNet/imodel/8/DDRNet_adapted.raw"
+jr_path = "../3_deploy/modelzoo/DDRNet/imodel/8/"
+log_path = "./logs/"
+
+[run]
+log_time = true
+log_io = true
+dump_format = "SFB"
+json = "../3_deploy/modelzoo/DDRNet/imodel/8/DDRNet_BY.json"
+raw = "../3_deploy/modelzoo/DDRNet/imodel/8/DDRNet_BY.raw"
+input = "./qtset/cityscapes/frankfurt_000000_000294_leftImg8bit.png"
+log_path = "./logs/"

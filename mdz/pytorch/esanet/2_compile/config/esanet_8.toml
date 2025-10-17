@@ -1,0 +1,56 @@
+[parse]
+net_name = "esanet"
+framework = "onnx"
+inputs = [[1,480,640,3],[1,480,640,1]]
+inputs_layout = 'NHWC;NHWC'
+pre_method = 'nop;nop'
+pre_mean = 'nop;nop'
+pre_scale = 'nop;nop'
+channel_swap = 'nop;nop'
+network = "./fmodel/esanet_480x640_sunrgbd.onnx"
+jr_path = "../3_deploy/modelzoo/esanet/imodel/8/"
+
+[optimize]
+target = "BUYI"
+json = "../3_deploy/modelzoo/esanet/imodel/8/esanet_parsed.json"
+raw = "../3_deploy/modelzoo/esanet/imodel/8/esanet_parsed.raw"
+jr_path = "../3_deploy/modelzoo/esanet/imodel/8/"
+
+[quantize]
+# forward_mode = "image"
+saturation = "kld"
+forward_dir = "./qtset/sample"
+forward_list = "./qtset/sample.txt"
+bits = 8
+json = "../3_deploy/modelzoo/esanet/imodel/8/esanet_optimized.json"
+raw = "../3_deploy/modelzoo/esanet/imodel/8/esanet_optimized.raw"
+jr_path = "../3_deploy/modelzoo/esanet/imodel/8/"
+per = "channel"
+target = "buyi"
+no_transinput = true
+
+[adapt]
+target = "BUYI"
+json = "../3_deploy/modelzoo/esanet/imodel/8/esanet_quantized.json"
+raw = "../3_deploy/modelzoo/esanet/imodel/8/esanet_quantized.raw"
+jr_path = "../3_deploy/modelzoo/esanet/imodel/8/"
+# pass_on =  "customop.ImageMakePass"
+# custom_config = "config/customop/model.toml"
+
+[generate]
+json = "../3_deploy/modelzoo/esanet/imodel/8/esanet_adapted.json"
+raw = "../3_deploy/modelzoo/esanet/imodel/8/esanet_adapted.raw"
+jr_path = "../3_deploy/modelzoo/esanet/imodel/8/"
+log_path = "./logs/"
+ocmopt = 0
+# no_mergeops = true
+
+[run]
+log_time = true
+log_io = true
+# dump_format = "SFB"
+json = "../3_deploy/modelzoo/esanet/imodel/8/esanet_BY.json"
+raw = "../3_deploy/modelzoo/esanet/imodel/8/esanet_BY.raw"
+input = "./qtset/sample/input0.ftmp;./qtset/sample/input1.ftmp"
+log_path = "./logs/"
+backends = "BY,socket://ql100aiu@192.168.124.134:9981?npu=0x40000000&dma=0x80000000;Host"

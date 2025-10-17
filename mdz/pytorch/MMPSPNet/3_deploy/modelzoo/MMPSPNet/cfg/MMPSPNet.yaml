@@ -1,0 +1,32 @@
+
+  # "p": "parsed",
+  # "o": "optimized",
+  # "q": "quantized",
+  # "a": "adapted",
+  # "g": "BY",
+imodel: 
+  cudamode: false  
+  mmu: true
+  speedmode: false
+  compressFtmp: false
+  dir: ../imodel/16
+  stage: g
+  sim: false
+  ip: 192.168.125.89
+  save: false
+  show: true
+
+
+dataset:
+  dir: ../io/input
+  list: ../io/list.txt
+  names: ../names/cityscapes_names.txt
+  res: ../io/output
+
+
+param:
+
+camera:
+  do: true
+  camerah: 1080
+  cameraw: 1920

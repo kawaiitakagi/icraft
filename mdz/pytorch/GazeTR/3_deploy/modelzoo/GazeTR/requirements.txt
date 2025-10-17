@@ -1,0 +1,10 @@
+matplotlib==3.6.2
+numpy==1.24.4
+opencv-python==4.8.1.78
+openpyxl==3.1.2
+pandas==1.3.5
+PyYAML==6.0.1
+easydict
+progressbar2
+h5py
+tqdm

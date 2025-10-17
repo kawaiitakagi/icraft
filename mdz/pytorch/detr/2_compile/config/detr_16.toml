@@ -1,0 +1,52 @@
+[parse]
+net_name = "detr_640x640"
+framework = "onnx"
+inputs = [[1, 640, 640, 3]]
+inputs_layout = "NHWC"
+pre_method = 'resize'
+pre_scale = '58.395,57.12,57.375'
+pre_mean ='123.675,116.28,103.53'
+channel_swap = '0,1,2'
+network = "./fmodel/detr_640x640.onnx"
+jr_path = "../3_deploy/modelzoo/detr/imodel/16/"
+
+[optimize]
+target = "BUYI"
+json = "../3_deploy/modelzoo/detr/imodel/16/detr_640x640_parsed.json"
+raw = "../3_deploy/modelzoo/detr/imodel/16/detr_640x640_parsed.raw"
+jr_path = "../3_deploy/modelzoo/detr/imodel/16/"
+pass_on = "icraft.DetrMergeTransposePass,icraft.DetrSwapDimPass"
+
+[quantize]
+forward_mode = "image"
+saturation = "kld"
+forward_dir = "./qtset/detr"
+forward_list = "./qtset/detr_one.txt"
+bits = 16
+json = "../3_deploy/modelzoo/detr/imodel/16/detr_640x640_optimized.json"
+raw = "../3_deploy/modelzoo/detr/imodel/16/detr_640x640_optimized.raw"
+jr_path = "../3_deploy/modelzoo/detr/imodel/16/"
+per = "channel"
+target = "buyi"
+batch = 10
+
+[adapt]
+target = "BUYI"
+json = "../3_deploy/modelzoo/detr/imodel/16/detr_640x640_quantized.json"
+raw = "../3_deploy/modelzoo/detr/imodel/16/detr_640x640_quantized.raw"
+jr_path = "../3_deploy/modelzoo/detr/imodel/16/"
+pass_on =  "customop.ImageMakePass"
+custom_config = "config/customop/detr.toml"
+[generate]
+json = "../3_deploy/modelzoo/detr/imodel/16/detr_640x640_adapted.json"
+raw = "../3_deploy/modelzoo/detr/imodel/16/detr_640x640_adapted.raw"
+jr_path = "../3_deploy/modelzoo/detr/imodel/16/"
+
+
+[run]
+log_time = false
+log_io = false
+dump_format = "SFB"
+json = "../3_deploy/modelzoo/detr/imodel/16/detr_640x640_BY.json"
+raw = "../3_deploy/modelzoo/detr/imodel/16/detr_640x640_BY.raw"
+input = "./qtset/detr/000000000139.jpg"

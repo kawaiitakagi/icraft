@@ -1,0 +1,55 @@
+[parse]
+net_name = "yolov5s_plin"
+framework = "pytorch"
+inputs = [ 1, 352, 640, 3]
+inputs_layout = "NHWC"
+pre_method = "nop"
+pre_scale = [ 255.0, 255.0, 255.0]
+pre_mean = [ 0.0, 0.0, 0.0]
+channel_swap = [ 0, 1, 2]
+network = "fmodel/yolov5s_352x640.pt"
+jr_path = "./imodel/plin_yolov5s/"
+frame_version = "1.9"
+
+[optimize]
+target = "BUYI"
+json = "./imodel/plin_yolov5s/yolov5s_plin_parsed.json"
+raw = "./imodel/plin_yolov5s/yolov5s_plin_parsed.raw"
+jr_path = "./imodel/plin_yolov5s/"
+
+[quantize]
+forward_mode = "image"
+saturation = "kld"
+forward_dir = "./qtset/coco"
+forward_list = "./qtset/coco.txt"
+bits = 8
+json = "./imodel/plin_yolov5s/yolov5s_plin_optimized.json"
+raw = "./imodel/plin_yolov5s/yolov5s_plin_optimized.raw"
+jr_path = "./imodel/plin_yolov5s/"
+per = "tensor"
+target = "buyi"
+
+[adapt]
+target = "BUYI"
+json = "./imodel/plin_yolov5s/yolov5s_plin_quantized.json"
+raw = "./imodel/plin_yolov5s/yolov5s_plin_quantized.raw"
+jr_path = "./imodel/plin_yolov5s/"
+pass_on =  "customop.ImageMakePass,customop.DetPostPass,customop.WarpAffinePass"
+custom_config = "config/customop/yolov5_warpaffine.toml"
+
+[generate]
+json = "./imodel/plin_yolov5s/yolov5s_plin_adapted.json"
+raw = "./imodel/plin_yolov5s/yolov5s_plin_adapted.raw"
+jr_path = "../3_deploy/modelzoo/siamfc++/imodel/plin_yolov5s/"
+log_path = "./logs/"
+no_mergeops = true
+etmopt = 0
+
+[run]
+log_time = true
+log_io = true
+dump_format = "SFB"
+json = "../3_deploy/modelzoo/siamfc++/imodel/plin_yolov5s/yolov5s_plin_BY.json"
+raw = ".../3_deploy/modelzoo/siamfc++/imodel/plin_yolov5s/yolov5s_plin_BY.raw"
+input = "./qtset/coco/bus.jpg"
+log_path = "./logs/"

@@ -1,0 +1,53 @@
+[parse]
+net_name = "ShuffleNet"
+framework = "pytorch"
+inputs = [ 1, 224, 224, 3]
+inputs_layout = "NHWC"
+pre_method = "resize"
+pre_scale = [ 58.395, 57.12, 57.375]
+pre_mean = [123.675, 116.28, 103.53]
+channel_swap = [ 0, 1, 2]
+network = "fmodel/ShuffleNetv2_224x224.pt"
+jr_path = "../3_deploy/modelzoo/ShuffleNet/imodel/16/"
+frame_version = "1.9"
+
+[optimize]
+target = "BUYI"
+json = "../3_deploy/modelzoo/ShuffleNet/imodel/16/ShuffleNet_parsed.json"
+raw = "../3_deploy/modelzoo/ShuffleNet/imodel/16/ShuffleNet_parsed.raw"
+jr_path = "../3_deploy/modelzoo/ShuffleNet/imodel/16/"
+
+[quantize]
+forward_mode = "image"
+saturation = "kld"
+forward_dir = "./qtset/imagenet"
+forward_list = "./qtset/imagenet.txt"
+bits = 16
+json = "../3_deploy/modelzoo/ShuffleNet/imodel/16/ShuffleNet_optimized.json"
+raw = "../3_deploy/modelzoo/ShuffleNet/imodel/16/ShuffleNet_optimized.raw"
+jr_path = "../3_deploy/modelzoo/ShuffleNet/imodel/16/"
+per = "channel"
+target = "buyi"
+#mix_precision = "auto"
+[adapt]
+target = "BUYI"
+json = "../3_deploy/modelzoo/ShuffleNet/imodel/16/ShuffleNet_quantized.json"
+raw = "../3_deploy/modelzoo/ShuffleNet/imodel/16/ShuffleNet_quantized.raw"
+jr_path = "../3_deploy/modelzoo/ShuffleNet/imodel/16/"
+pass_on =  "customop.ImageMakePass"
+custom_config = "config/customop/ImageMake.toml"
+
+[generate]
+json = "../3_deploy/modelzoo/ShuffleNet/imodel/16/ShuffleNet_adapted.json"
+raw = "../3_deploy/modelzoo/ShuffleNet/imodel/16/ShuffleNet_adapted.raw"
+jr_path = "../3_deploy/modelzoo/ShuffleNet/imodel/16/"
+ocmopt = -1
+
+[run]
+log_time = true
+log_io = true
+dump_format = "SFB"
+json = "../3_deploy/modelzoo/ShuffleNet/imodel/16/ShuffleNet_BY.json"
+raw = "../3_deploy/modelzoo/ShuffleNet/imodel/16/ShuffleNet_BY.raw"
+input = "./qtset/imagenet/ILSVRC2012_val_00000003.JPEG"
+backends = "BY,socket://ql100aiu@192.168.124.141:9981?npu=0x40000000&dma=0x80000000;Host"

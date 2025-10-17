@@ -1,0 +1,53 @@
+[parse]
+net_name = "superglue-outdoor-512-norm"
+framework = "pytorch"
+frame_version = "1.9" 
+inputs = [[1,512,1,256],[1,512,1,2],[1,512,1,1],[1,512,1,256],[1,512,1,2],[1,512,1,1]]
+inputs_layout = "NHWC;NHWC;NHWC;NHWC;NHWC;NHWC"
+pre_method = "nop;nop;nop;nop;nop;nop"
+#post_method = "nop"
+pre_scale = "nop;nop;nop;nop;nop;nop"
+pre_mean = "nop;nop;nop;nop;nop;nop"
+channel_swap = "nop;nop;nop;nop;nop;nop"
+network = "./fmodel/superglue-outdoor-512-norm.pt"
+jr_path = "../3_deploy/modelzoo/superglue/imodel/superglue-outdoor-512-norm/"
+
+[optimize]
+target = "BUYI"
+json = "../3_deploy/modelzoo/superglue/imodel/superglue-outdoor-512-norm/superglue-outdoor-512-norm_parsed.json"
+raw = "../3_deploy/modelzoo/superglue/imodel/superglue-outdoor-512-norm/superglue-outdoor-512-norm_parsed.raw"
+jr_path = "../3_deploy/modelzoo/superglue/imodel/superglue-outdoor-512-norm/"
+
+
+[quantize]
+forward_mode = "image"
+saturation = "null"
+forward_dir = "./qtset/superglue/"
+forward_list = "./qtset/superglue.txt"
+bits = 8
+json = "../3_deploy/modelzoo/superglue/imodel/superglue-outdoor-512-norm/superglue-outdoor-512-norm_optimized.json"
+raw = "../3_deploy/modelzoo/superglue/imodel/superglue-outdoor-512-norm/superglue-outdoor-512-norm_optimized.raw"
+jr_path = "../3_deploy/modelzoo/superglue/imodel/superglue-outdoor-512-norm/"
+per = "tensor"
+target = "buyi"
+
+[adapt]
+target = "BUYI"
+json = "../3_deploy/modelzoo/superglue/imodel/superglue-outdoor-512-norm/superglue-outdoor-512-norm_quantized.json"
+raw = "../3_deploy/modelzoo/superglue/imodel/superglue-outdoor-512-norm/superglue-outdoor-512-norm_quantized.raw"
+jr_path = "../3_deploy/modelzoo/superglue/imodel/superglue-outdoor-512-norm/"
+
+[generate]
+json = "../3_deploy/modelzoo/superglue/imodel/superglue-outdoor-512-norm/superglue-outdoor-512-norm_adapted.json"
+raw = "../3_deploy/modelzoo/superglue/imodel/superglue-outdoor-512-norm/superglue-outdoor-512-norm_adapted.raw"
+jr_path = "../3_deploy/modelzoo/superglue/imodel/superglue-outdoor-512-norm/"
+log_path = "./logs/"
+
+[run]
+log_time = true
+log_io = true
+dump_format = "SFB"
+json = "../3_deploy/modelzoo/superglue/imodel/superglue-outdoor-512-norm/superglue-outdoor-512-norm_BY.json"
+raw = "../3_deploy/modelzoo/superglue/imodel/superglue-outdoor-512-norm/superglue-outdoor-512-norm_BY.raw"
+input = "./qtset/superglue/00172642_6310427717_35249264_6310946396_1_1_512_1_256.ftmp;./qtset/superglue/00172642_6310427717_35249264_6310946396_2_1_512_1_2.ftmp;./qtset/superglue/00172642_6310427717_35249264_6310946396_3_1_512_1_1.ftmp;./qtset/superglue/00172642_6310427717_35249264_6310946396_4_1_512_1_256.ftmp;./qtset/superglue/00172642_6310427717_35249264_6310946396_5_1_512_1_2.ftmp;./qtset/superglue/00172642_6310427717_35249264_6310946396_6_1_512_1_1.ftmp"
+backends = "BY,socket://ql100aiu@192.168.125.183:9981?npu=0x40000000&dma=0x80000000;Host"

@@ -1,0 +1,24 @@
+
+  # "p": "parsed",
+  # "o": "optimized",
+  # "q": "quantized",
+  # "a": "adapted",
+  # "g": "BY",
+imodel: 
+  cudamode: false  
+  mmu: true
+  speedmode: false
+  compressFtmp: false
+  dir: ../imodel/8
+  stage: g
+  sim: false
+  ip: 192.168.125.184
+  save: true
+  show: true
+  timeRes: false
+ 
+dataset:
+  dir: ../io/input
+  list: ../io/test_list.txt
+  names: ../names/UrbanSound8K.names
+  res: ../io/output

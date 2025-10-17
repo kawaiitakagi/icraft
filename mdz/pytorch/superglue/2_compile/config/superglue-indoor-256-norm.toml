@@ -1,0 +1,45 @@
+[parse]
+net_name = "superglue-indoor-256-norm"
+framework = "pytorch"
+frame_version = "1.9" 
+inputs = [[1,256,1,256],[1,256,1,2],[1,256,1,1],[1,256,1,256],[1,256,1,2],[1,256,1,1]]
+inputs_layout = "NHWC;NHWC;NHWC;NHWC;NHWC;NHWC"
+pre_method = "nop;nop;nop;nop;nop;nop"
+#post_method = "nop"
+pre_scale = "nop;nop;nop;nop;nop;nop"
+pre_mean = "nop;nop;nop;nop;nop;nop"
+channel_swap = "nop;nop;nop;nop;nop;nop"
+network = "./fmodel/superglue-indoor-256-norm.pt"
+jr_path = "../3_deploy/modelzoo/superglue/imodel/superglue-indoor-256-norm/"
+
+[optimize]
+target = "BUYI"
+json = "../3_deploy/modelzoo/superglue/imodel/superglue-indoor-256-norm/superglue-indoor-256-norm_parsed.json"
+raw = "../3_deploy/modelzoo/superglue/imodel/superglue-indoor-256-norm/superglue-indoor-256-norm_parsed.raw"
+jr_path = "../3_deploy/modelzoo/superglue/imodel/superglue-indoor-256-norm/"
+
+
+[quantize]
+forward_mode = "image"
+saturation = "null"
+forward_dir = "./qtset/superglue_256/"
+forward_list = "./qtset/superglue_256.txt"
+bits = 8
+json = "../3_deploy/modelzoo/superglue/imodel/superglue-indoor-256-norm/superglue-indoor-256-norm_optimized.json"
+raw = "../3_deploy/modelzoo/superglue/imodel/superglue-indoor-256-norm/superglue-indoor-256-norm_optimized.raw"
+jr_path = "../3_deploy/modelzoo/superglue/imodel/superglue-indoor-256-norm/"
+per = "tensor"
+target = "buyi"
+
+[adapt]
+target = "BUYI"
+json = "../3_deploy/modelzoo/superglue/imodel/superglue-indoor-256-norm/superglue-indoor-256-norm_quantized.json"
+raw = "../3_deploy/modelzoo/superglue/imodel/superglue-indoor-256-norm/superglue-indoor-256-norm_quantized.raw"
+jr_path = "../3_deploy/modelzoo/superglue/imodel/superglue-indoor-256-norm/"
+
+[generate]
+json = "../3_deploy/modelzoo/superglue/imodel/superglue-indoor-256-norm/superglue-indoor-256-norm_adapted.json"
+raw = "../3_deploy/modelzoo/superglue/imodel/superglue-indoor-256-norm/superglue-indoor-256-norm_adapted.raw"
+jr_path = "../3_deploy/modelzoo/superglue/imodel/superglue-indoor-256-norm/"
+log_path = "./logs/"
+

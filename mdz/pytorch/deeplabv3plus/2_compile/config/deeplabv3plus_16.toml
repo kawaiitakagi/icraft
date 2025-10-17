@@ -1,0 +1,53 @@
+[parse]
+net_name = "deeplabv3plus"
+framework = "pytorch"
+inputs = [ 1, 513, 513, 3]
+inputs_layout = "NHWC"
+pre_method = "resize"
+pre_scale = [ 58.395, 57.12, 57.375]
+pre_mean = [ 123.675, 116.28, 103.53]
+channel_swap = [0, 1, 2]
+network = "fmodel/deeplab-resnet-513x513.pt"
+jr_path = "../3_deploy/modelzoo/deeplabv3plus/imodel/16/"
+frame_version = "1.9"
+
+[optimize]
+target = "BUYI"
+json = "../3_deploy/modelzoo/deeplabv3plus/imodel/16/deeplabv3plus_parsed.json"
+raw = "../3_deploy/modelzoo/deeplabv3plus/imodel/16/deeplabv3plus_parsed.raw"
+jr_path = "../3_deploy/modelzoo/deeplabv3plus/imodel/16/"
+
+[quantize]
+forward_mode = "image"
+saturation = "kld"
+forward_dir = "./qtset/voc2012"
+forward_list = "./qtset/voc2012.txt"
+bits = 16
+json = "../3_deploy/modelzoo/deeplabv3plus/imodel/16/deeplabv3plus_optimized.json"
+raw = "../3_deploy/modelzoo/deeplabv3plus/imodel/16/deeplabv3plus_optimized.raw"
+jr_path = "../3_deploy/modelzoo/deeplabv3plus/imodel/16/"
+per = "tensor"
+target = "buyi"
+
+[adapt]
+target = "BUYI"
+json = "../3_deploy/modelzoo/deeplabv3plus/imodel/16/deeplabv3plus_quantized.json"
+raw = "../3_deploy/modelzoo/deeplabv3plus/imodel/16/deeplabv3plus_quantized.raw"
+jr_path = "../3_deploy/modelzoo/deeplabv3plus/imodel/16/"
+pass_on =  "customop.ImageMakePass"
+custom_config = "config/customop/deeplabv3plus.toml"
+
+[generate]
+json = "../3_deploy/modelzoo/deeplabv3plus/imodel/16/deeplabv3plus_adapted.json"
+raw = "../3_deploy/modelzoo/deeplabv3plus/imodel/16/deeplabv3plus_adapted.raw"
+jr_path = "../3_deploy/modelzoo/deeplabv3plus/imodel/16/"
+log_path = "./logs/"
+
+[run]
+log_time = true
+log_io = true
+dump_format = "SFB"
+json = "../3_deploy/modelzoo/deeplabv3plus/imodel/16/deeplabv3plus_BY.json"
+raw = "../3_deploy/modelzoo/deeplabv3plus/imodel/16/deeplabv3plus_BY.raw"
+input = "./qtset/voc2012/2008_003124.jpg"
+log_path = "./logs/"

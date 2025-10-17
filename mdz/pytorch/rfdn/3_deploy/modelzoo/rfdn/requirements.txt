@@ -1,0 +1,8 @@
+Python 3.6
+PyTorch >= 1.0.0
+numpy
+scikit-image
+imageio
+matplotlib
+tqdm
+cv2 >= 3.xx (Only if you want to use video input/output)

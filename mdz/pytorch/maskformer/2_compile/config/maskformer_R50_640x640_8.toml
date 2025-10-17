@@ -1,0 +1,45 @@
+
+
+[parse]
+net_name = "maskformer_R50_640x640"
+framework = "onnx"
+inputs = [[1, 640, 640, 3]]
+inputs_layout = "NHWC"
+pre_method = 'resize'
+pre_scale = '58.395,57.12,57.375'
+pre_mean ='123.675,116.28,103.53'
+#pre_scale = [ 1.0, 1.0, 1.0]
+#pre_mean = [ 0.0, 0.0, 0.0]
+channel_swap = '0,1,2'
+network = "./fmodel/maskformer_R50_640x640.onnx"
+jr_path = "../3_deploy/modelzoo/maskformer/imodel/8/"
+
+[optimize]
+target = "BUYI"
+json = "../3_deploy/modelzoo/maskformer/imodel/8/maskformer_R50_640x640_parsed.json"
+raw = "../3_deploy/modelzoo/maskformer/imodel/8/maskformer_R50_640x640_parsed.raw"
+jr_path = "../3_deploy/modelzoo/maskformer/imodel/8/"
+
+[quantize]
+forward_mode = "image"
+saturation = "kld"
+forward_dir = "./qtset/ade"
+forward_list = "./qtset/ade.txt"
+bits = 8
+json = "../3_deploy/modelzoo/maskformer/imodel/8/maskformer_R50_640x640_optimized.json"
+raw = "../3_deploy/modelzoo/maskformer/imodel/8/maskformer_R50_640x640_optimized.raw"
+jr_path = "../3_deploy/modelzoo/maskformer/imodel/8/"
+per = "channel"
+target = "buyi"
+
+[adapt]
+target = "BUYI"
+json = "../3_deploy/modelzoo/maskformer/imodel/8/maskformer_R50_640x640_quantized.json"
+raw = "../3_deploy/modelzoo/maskformer/imodel/8/maskformer_R50_640x640_quantized.raw"
+jr_path = "../3_deploy/modelzoo/maskformer/imodel/8/"
+pass_on =  "customop.ImageMakePass"
+custom_config = "config/customop/imk.toml"
+[generate]
+json = "../3_deploy/modelzoo/maskformer/imodel/8/maskformer_R50_640x640_adapted.json"
+raw = "../3_deploy/modelzoo/maskformer/imodel/8/maskformer_R50_640x640_adapted.raw"
+jr_path = "../3_deploy/modelzoo/maskformer/imodel/8/"

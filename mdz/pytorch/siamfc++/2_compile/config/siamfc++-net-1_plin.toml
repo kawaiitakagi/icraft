@@ -1,0 +1,59 @@
+[parse]
+net_name = "siamfc++-net-1"
+framework = "pytorch"
+inputs = [ 1, 127, 127, 3]
+inputs_layout = "NHWC"
+pre_method = "nop"
+#post_method = "nop"
+pre_scale = [ 1.0, 1.0, 1.0]
+pre_mean = [ 0.0, 0.0, 0.0]
+channel_swap = [ 0, 1, 2]
+network = "./fmodel/siamfc++-net-1-127x127.pt"
+jr_path = "./imodel/plin_siamfc++_net1/"
+frame_version = "1.9"
+
+[optimize]
+target = "BUYI"
+json = "./imodel/plin_siamfc++_net1/siamfc++-net-1_parsed.json"
+raw = "./imodel/plin_siamfc++_net1/siamfc++-net-1_parsed.raw"
+jr_path = "./imodel/plin_siamfc++_net1/"
+
+[quantize]
+forward_mode = "image"
+saturation = "kld"
+forward_dir = "./qtset/siamfc++-net1_plin"
+forward_list = "./qtset/siamfc++-net1_plin.txt"
+bits = 8
+batch = 1
+json = "./imodel/plin_siamfc++_net1/siamfc++-net-1_optimized.json"
+raw = "./imodel/plin_siamfc++_net1/siamfc++-net-1_optimized.raw"
+jr_path = "./imodel/plin_siamfc++_net1/"
+per = "channel"
+target = "buyi"
+
+
+[adapt]
+target = "BUYI"
+json = "./imodel/plin_siamfc++_net1/siamfc++-net-1_quantized.json"
+raw = "./imodel/plin_siamfc++_net1/siamfc++-net-1_quantized.raw"
+jr_path = "./imodel/plin_siamfc++_net1/"
+pass_on =  "customop.ImageMakePass,customop.WarpAffinePass"
+custom_config = "./config/customop/yolov5_warpaffine.toml"
+
+[generate]
+json = "./imodel/plin_siamfc++_net1/siamfc++-net-1_adapted.json"
+raw = "./imodel/plin_siamfc++_net1/siamfc++-net-1_adapted.raw"
+jr_path = "../3_deploy/modelzoo/siamfc++/imodel/plin_siamfc++_net1/"
+log_path = "./logs/"
+no_mergeops = true
+etmopt = 0
+
+[run]
+log_time = true
+log_io = true
+dump_format = "SFB"
+json = "../3_deploy/modelzoo/siamfc++/imodel//siamfc++-net-1_BY.json"
+raw = "../3_deploy/modelzoo/siamfc++/imodel//siamfc++-net-1_BY.raw"
+input = "D:/code/VOT/dataset/LaSOT/test/airplane-1/img/00000001.jpg"
+backends = "BY,socket://ql100aiu@192.168.125.178:9981?npu=0x40000000&dma=0x80000000;Host"
+log_path = "./logs/"

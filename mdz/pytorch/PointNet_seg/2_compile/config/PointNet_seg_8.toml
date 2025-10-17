@@ -1,0 +1,55 @@
+[parse]
+net_name = "PointNet_seg"
+framework = "pytorch"
+frame_version = "1.9"
+inputs = [1,3,2500]
+inputs_layout = "FD"
+pre_method = "nop"
+pre_scale = "nop"
+pre_mean = "nop"
+channel_swap ="nop"
+network = "./fmodel/PointNet_seg_2500x3.pt"
+jr_path = "../3_deploy/modelzoo/PointNet_seg/imodel/8/"
+
+[optimize]
+target = "BUYI"
+json = "../3_deploy/modelzoo/PointNet_seg/imodel/8/PointNet_seg_parsed.json"
+raw = "../3_deploy/modelzoo/PointNet_seg/imodel/8/PointNet_seg_parsed.raw"
+jr_path = "../3_deploy/modelzoo/PointNet_seg/imodel/8/"
+
+[quantize]
+no_transinput = true 
+no_imagemake = true
+saturation = "kld"
+forward_dir = "./qtset/PointNet_seg_ftmp"
+forward_list = "./qtset/PointNet_seg_ftmp.txt"
+batch = 1
+bits = 8
+json = "../3_deploy/modelzoo/PointNet_seg/imodel/8/PointNet_seg_optimized.json"
+raw = "../3_deploy/modelzoo/PointNet_seg/imodel/8/PointNet_seg_optimized.raw"
+jr_path = "../3_deploy/modelzoo/PointNet_seg/imodel/8/"
+per = "channel"
+target = "buyi"
+
+[adapt]
+target = "BUYI"
+json = "../3_deploy/modelzoo/PointNet_seg/imodel/8/PointNet_seg_quantized.json"
+raw = "../3_deploy/modelzoo/PointNet_seg/imodel/8/PointNet_seg_quantized.raw"
+jr_path = "../3_deploy/modelzoo/PointNet_seg/imodel/8/"
+
+
+[generate]
+json = "../3_deploy/modelzoo/PointNet_seg/imodel/8/PointNet_seg_adapted.json"
+raw = "../3_deploy/modelzoo/PointNet_seg/imodel/8/PointNet_seg_adapted.raw"
+jr_path = "../3_deploy/modelzoo/PointNet_seg/imodel/8/"
+ocmopt = 0
+
+[run]
+log_time = true
+log_io = true
+dump_format = "SFB"
+json = "../3_deploy/modelzoo/PointNet_seg/imodel/8/PointNet_seg_BY.json"
+raw = "../3_deploy/modelzoo/PointNet_seg/imodel/8/PointNet_seg_BY.raw"
+input = "./qtset/PointNet_seg_ftmp/test_1.ftmp"
+backends = "BY,socket://ql100aiu@192.168.125.184:9981?npu=0x40000000&dma=0x80000000;Host"
+

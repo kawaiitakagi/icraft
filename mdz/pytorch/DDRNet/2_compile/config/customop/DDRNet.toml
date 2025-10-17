@@ -1,0 +1,14 @@
+[ImageMake]
+forward_dll = ""
+forward_so = ""
+no_imkpad = 0
+
+[SegPost]
+mode = 1           # 1: segpost模式,upsample与argmax一起工作；0：argmax模式，只启动argmax模块
+src_ysize = 128    # 不能为0，最大为1024
+src_xsize = 256    # 不能为0，最大为1024
+dst_ysize = 1024   # 不能为0或1，最大不能超过srcsize的32倍
+dst_xsize = 2048   # 不能为0或1，最大不能超过srcsize的32倍
+align_corner = 0   # 双线性插值参数：1表示边上对齐，0表示中心对齐
+sleep_time = 0.001
+out_index = "0"

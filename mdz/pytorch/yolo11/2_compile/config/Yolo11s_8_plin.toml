@@ -1,0 +1,57 @@
+[parse]
+net_name = "yolo11s"
+framework = "pytorch"
+frame_version = "1.9"
+inputs = [1, 512, 960, 3]
+inputs_layout = "NHWC"
+pre_method = "resize"
+pre_scale = [255.0, 255.0, 255.0]
+pre_mean = [0.0, 0.0, 0.0]
+channel_swap = [0, 1, 2]
+network = "fmodel/yolo11s_512x960.pt"
+jr_path = "../3_deploy/modelzoo_v3.1.0/yolo11/imodel/8_plin/"
+
+[optimize]
+target = "BUYI"
+json = "../3_deploy/modelzoo_v3.1.0/yolo11/imodel/8_plin/yolo11s_parsed.json"
+raw = "../3_deploy/modelzoo_v3.1.0/yolo11/imodel/8_plin/yolo11s_parsed.raw"
+jr_path = "../3_deploy/modelzoo_v3.1.0/yolo11/imodel/8_plin/"
+
+[quantize]
+forward_mode = "image" 
+saturation = "kld"
+forward_dir = "./qtset/coco"
+forward_list = "./qtset/coco.txt "
+batch = 1
+bits = 8
+json = "../3_deploy/modelzoo_v3.1.0/yolo11/imodel/8_plin/yolo11s_optimized.json"
+raw = "../3_deploy/modelzoo_v3.1.0/yolo11/imodel/8_plin/yolo11s_optimized.raw"
+jr_path = "../3_deploy/modelzoo_v3.1.0/yolo11/imodel/8_plin/"
+per = "channel"
+target = "buyi"
+
+[adapt]
+target = "BUYI"
+json = "../3_deploy/modelzoo_v3.1.0/yolo11/imodel/8_plin/yolo11s_quantized.json"
+raw = "../3_deploy/modelzoo_v3.1.0/yolo11/imodel/8_plin/yolo11s_quantized.raw"
+jr_path = "../3_deploy/modelzoo_v3.1.0/yolo11/imodel/8_plin/"
+pass_on =  "customop.ImageMakePass,customop.DetPostPass"
+custom_config = "config/customop/yolo11s.toml"
+
+[generate]
+json = "../3_deploy/modelzoo_v3.1.0/yolo11/imodel/8_plin/yolo11s_adapted.json"
+raw = "../3_deploy/modelzoo_v3.1.0/yolo11/imodel/8_plin/yolo11s_adapted.raw"
+jr_path = "../3_deploy/modelzoo_v3.1.0/yolo11/imodel/8_plin/"
+log_path = "./logs/"
+no_mergeops = true
+etmopt = 0
+
+[run]
+log_time = true
+log_io = true
+dump_format = "SFB"
+json = "../3_deploy/modelzoo_v3.1.0/yolo11/imodel/8_plin/yolo11s_BY.json"
+raw = "../3_deploy/modelzoo_v3.1.0/yolo11/imodel/8_plin/yolo11s_BY.raw"
+input = "./qtset/coco/bus.jpg"
+log_path = "./logs/"
+

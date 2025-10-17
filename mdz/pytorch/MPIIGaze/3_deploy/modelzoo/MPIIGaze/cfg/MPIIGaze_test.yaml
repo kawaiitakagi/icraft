@@ -1,0 +1,34 @@
+
+  # "p": "parsed",
+  # "o": "optimized",
+  # "q": "quantized",
+  # "a": "adapted",
+  # "g": "BY",
+imodel: 
+  cudamode: false  
+  mmu: true
+  speedmode: false
+  compressFtmp: false
+  net_dir: ../imodel/16/
+  stage: q
+  sim: true
+  ip: 192.168.125.185
+  save: true
+  show: true
+  calctime: false
+ 
+dataset:
+  dir: ../io/datasets/MPIIGaze # 数据集路径
+  res: ../io/output/metric/
+
+param:
+  test_id: 0  # person_id
+  batch_size: 1 
+  dataloader:
+    num_workers: 1
+    pin_memory: False
+
+camera:
+  do: true
+  camerah: 1080
+  cameraw: 1920

@@ -1,0 +1,54 @@
+[parse]
+net_name = "U2Net_det"
+framework = "pytorch"
+inputs = [ 1, 320, 320, 3]
+inputs_layout = "NHWC"
+pre_method = "resize"
+pre_scale = [ 58.395, 57.12, 57.375]
+pre_mean = [ 123.675, 116.28, 103.53]
+channel_swap = [0, 1, 2]
+network = "./fmodel/u2net_det_320x320_traced_new.pt"
+jr_path = "../3_deploy/modelzoo/U2Net_det/imodel/16/"
+frame_version = "1.9"
+
+[optimize]
+target = "BUYI"
+json = "../3_deploy/modelzoo/U2Net_det/imodel/16/U2Net_det_parsed.json"
+raw = "../3_deploy/modelzoo/U2Net_det/imodel/16/U2Net_det_parsed.raw"
+jr_path = "../3_deploy/modelzoo/U2Net_det/imodel/16/"
+
+[quantize]
+forward_mode = "image"
+saturation = "kld"
+forward_dir = "./qtset/DUTS"
+forward_list = "./qtset/DUTS.txt"
+bits = 16
+json = "../3_deploy/modelzoo/U2Net_det/imodel/16/U2Net_det_optimized.json"
+raw = "../3_deploy/modelzoo/U2Net_det/imodel/16/U2Net_det_optimized.raw"
+jr_path = "../3_deploy/modelzoo/U2Net_det/imodel/16/"
+per = "tensor"
+target = "buyi"
+
+[adapt]
+target = "BUYI"
+json = "../3_deploy/modelzoo/U2Net_det/imodel/16/U2Net_det_quantized.json"
+raw = "../3_deploy/modelzoo/U2Net_det/imodel/16/U2Net_det_quantized.raw"
+jr_path = "../3_deploy/modelzoo/U2Net_det/imodel/16/"
+pass_on =  "customop.ImageMakePass"
+custom_config = "config/customop/U2Net.toml"
+
+[generate]
+json = "../3_deploy/modelzoo/U2Net_det/imodel/16/U2Net_det_adapted.json"
+raw = "../3_deploy/modelzoo/U2Net_det/imodel/16/U2Net_det_adapted.raw"
+jr_path = "../3_deploy/modelzoo/U2Net_det/imodel/16/"
+log_path = "./logs/"
+ocmopt = 3
+
+[run]
+log_time = true
+log_io = true
+dump_format = "SFB"
+json = "../3_deploy/modelzoo/U2Net_det/imodel/16/U2Net_det_BY.json"
+raw = "../3_deploy/modelzoo/U2Net_det/imodel/16/U2Net_det_BY.raw"
+input = "./qtset/DUTS/ILSVRC2012_test_00000232.jpg"
+log_path = "./logs/"

@@ -1,0 +1,55 @@
+[parse]
+net_name = "spynet_320x544"
+framework = "pytorch"
+inputs = [[1, 320, 544, 3], [1, 320, 544, 3]]
+inputs_layout = "NHWC;NHWC"
+pre_method = "nop;nop"
+pre_scale = "58.395,57.12,57.375;58.395,57.12,57.375"
+pre_mean = "123.675,116.28,103.53;123.675,116.28,103.53"
+channel_swap = "0,1,2;0,1,2"
+network = "./fmodel/spynet_320x544.pt"
+jr_path =  "../3_deploy/modelzoo/spynet/imodel/8/"
+frame_version = "1.9"
+
+[optimize]
+target = "BUYI"
+json =  "../3_deploy/modelzoo/spynet/imodel/8/spynet_320x544_parsed.json"
+raw =  "../3_deploy/modelzoo/spynet/imodel/8/spynet_320x544_parsed.raw"
+jr_path =  "../3_deploy/modelzoo/spynet/imodel/8/"
+pass_on = "customop.RemoveGridSampleTransposePass"
+
+[quantize]
+forward_mode = "image"
+saturation = "kld" # "kld"
+forward_dir = "./qtset/spynet_544x320"
+forward_list = "./qtset/spynet_544x320.txt"
+bits = 8
+json =  "../3_deploy/modelzoo/spynet/imodel/8/spynet_320x544_optimized.json"
+raw =  "../3_deploy/modelzoo/spynet/imodel/8/spynet_320x544_optimized.raw"
+jr_path =  "../3_deploy/modelzoo/spynet/imodel/8/"
+per = "tensor"
+target = "buyi"
+mix_precision = "auto"
+#mix_precision = ".icraft/logs/spynet_320x544/spynet_320x544_mix_config.csv"
+
+[adapt]
+target = "BUYI"
+json =  "../3_deploy/modelzoo/spynet/imodel/8/spynet_320x544_quantized.json"
+raw =  "../3_deploy/modelzoo/spynet/imodel/8/spynet_320x544_quantized.raw"
+jr_path =  "../3_deploy/modelzoo/spynet/imodel/8/"
+pass_on = "customop.RemoveGridSampleCastPass"
+
+
+[generate]
+json =  "../3_deploy/modelzoo/spynet/imodel/8/spynet_320x544_adapted.json"
+raw =  "../3_deploy/modelzoo/spynet/imodel/8/spynet_320x544_adapted.raw"
+jr_path =  "../3_deploy/modelzoo/spynet/imodel/8/"
+etmopt = 0
+# no_mergeops = true
+[run]
+log_time = false
+log_io = false
+dump_format = "SFB"
+json =  "../3_deploy/modelzoo/spynet/imodel/8/spynet_320x544_quantized.json"
+raw =  "../3_deploy/modelzoo/spynet/imodel/8/spynet_320x544_quantized.raw"
+input = "./qtset/spynet_544x320/one.png;./qtset/spynet_544x320/two.png"

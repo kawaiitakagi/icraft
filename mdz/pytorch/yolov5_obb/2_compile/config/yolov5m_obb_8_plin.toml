@@ -1,0 +1,49 @@
+[parse]
+net_name = "yolov5m_obb"
+framework = "pytorch"
+frame_version = "1.9"
+inputs = [1, 1024, 1024, 3]
+inputs_layout = "NHWC"
+pre_method = "resize"
+pre_scale = [255.0, 255.0, 255.0]
+pre_mean = [0.0, 0.0, 0.0]
+channel_swap = [0, 1, 2]
+network = "fmodel/YoloV5m_obb_1024x1024.pt"
+jr_path = "../3_deploy/modelzoo/yolov5_obb/imodel/8/"
+
+[optimize]
+target = "BUYI"
+json = "../3_deploy/modelzoo/yolov5_obb/imodel/8/yolov5m_obb_parsed.json"
+raw = "../3_deploy/modelzoo/yolov5_obb/imodel/8/yolov5m_obb_parsed.raw"
+jr_path = "../3_deploy/modelzoo/yolov5_obb/imodel/8/"
+
+
+[quantize]
+forward_mode = "image"
+saturation ="kld"
+forward_dir = "./qtset/dotav15"
+forward_list = "./qtset/dotav15.txt" 
+batch = 1
+bits = 8
+json = "../3_deploy/modelzoo/yolov5_obb/imodel/8/yolov5m_obb_optimized.json"
+raw = "../3_deploy/modelzoo/yolov5_obb/imodel/8/yolov5m_obb_optimized.raw"
+jr_path = "../3_deploy/modelzoo/yolov5_obb/imodel/8/"
+per = "channel"
+target = "buyi"
+
+[adapt]
+target = "BUYI"
+json = "../3_deploy/modelzoo/yolov5_obb/imodel/8/yolov5m_obb_quantized.json"
+raw = "../3_deploy/modelzoo/yolov5_obb/imodel/8/yolov5m_obb_quantized.raw"
+jr_path = "../3_deploy/modelzoo/yolov5_obb/imodel/8/"
+pass_on =  "customop.ImageMakePass"
+custom_config = "config/customop/yolov5m_obb.toml"
+
+[generate]
+ocmopt = 3
+json = "../3_deploy/modelzoo/yolov5_obb/imodel/8/yolov5m_obb_adapted.json"
+raw = "../3_deploy/modelzoo/yolov5_obb/imodel/8/yolov5m_obb_adapted.raw"
+jr_path = "../3_deploy/modelzoo/yolov5_obb/imodel/8/"
+log_path = "./logs/"
+no_mergeops = true
+etmopt = 0

@@ -1,0 +1,50 @@
+[parse]
+net_name = 'moderntcn_ltf'
+framework = 'pytorch'
+inputs = [[1,7,336],[1,1,7],[1,1,7]]
+inputs_layout = 'FD;FD;FD'
+pre_method = 'nop;nop;nop'
+pre_mean = 'nop;nop;nop'
+pre_scale = 'nop;nop;nop'
+channel_swap = 'nop;nop;nop'
+network = './fmodel/moderntcn_ltf.pt'
+jr_path = '../3_deploy/modelzoo/moderntcn/imodel/ltf/16' 
+frame_version = '1.9'
+
+[optimize]
+target = 'BUYI'
+json = '../3_deploy/modelzoo/moderntcn/imodel/ltf/16/moderntcn_ltf_parsed.json'
+raw = '../3_deploy/modelzoo/moderntcn/imodel/ltf/16/moderntcn_ltf_parsed.raw'
+jr_path = '../3_deploy/modelzoo/moderntcn/imodel/ltf/16'
+pass_off ="icraft.RemoveUselessMaxpoolPass"
+
+[quantize]
+forward_mode = 'image'
+saturation = 'kld'
+forward_dir = './qtset/ltf'
+forward_list = './qtset/ltf.txt'
+bits = 16
+json = '../3_deploy/modelzoo/moderntcn/imodel/ltf/16/moderntcn_ltf_optimized.json'
+raw = '../3_deploy/modelzoo/moderntcn/imodel/ltf/16/moderntcn_ltf_optimized.raw'
+jr_path = '../3_deploy/modelzoo/moderntcn/imodel/ltf/16'
+per = 'tensor'
+target = "buyi"
+
+[adapt]
+target = 'BUYI'
+json = '../3_deploy/modelzoo/moderntcn/imodel/ltf/16/moderntcn_ltf_quantized.json'
+raw = '../3_deploy/modelzoo/moderntcn/imodel/ltf/16/moderntcn_ltf_quantized.raw'
+jr_path = '../3_deploy/modelzoo/moderntcn/imodel/ltf/16'
+pass_on ="icraft.RemoveUselessMaxpoolPass,icraft.MotcnPass"
+
+[generate]
+json = '../3_deploy/modelzoo/moderntcn/imodel/ltf/16/moderntcn_ltf_adapted.json'
+raw = '../3_deploy/modelzoo/moderntcn/imodel/ltf/16/moderntcn_ltf_adapted.raw'
+jr_path = '../3_deploy/modelzoo/moderntcn/imodel/ltf/16'
+log_path = './logs/'
+# no_mergeops = true
+
+
+
+
+

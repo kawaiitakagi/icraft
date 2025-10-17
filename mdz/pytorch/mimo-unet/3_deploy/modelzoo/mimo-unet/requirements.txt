@@ -1,0 +1,5 @@
+Python
+Pytorch (1.4)
+scikit-image
+opencv-python
+Tensorboard

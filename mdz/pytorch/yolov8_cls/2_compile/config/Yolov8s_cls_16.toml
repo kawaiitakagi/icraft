@@ -1,0 +1,54 @@
+[parse]
+net_name = "Yolov8s_cls"
+framework = "pytorch"
+frame_version = "1.9"
+inputs = [1, 224, 224, 3]
+inputs_layout = "NHWC"
+pre_method = "resize"
+pre_scale = [255.0, 255.0, 255.0]
+pre_mean = [0.0, 0.0, 0.0]
+channel_swap = [0, 1, 2]
+network = "fmodel/yolov8s-cls-224x224.pt"
+jr_path = "../3_deploy/modelzoo/yolov8_cls/imodel/16/"
+
+[optimize]
+target = "BUYI"
+json = "../3_deploy/modelzoo/yolov8_cls/imodel/16/yolov8s_cls_parsed.json"
+raw = "../3_deploy/modelzoo/yolov8_cls/imodel/16/yolov8s_cls_parsed.raw"
+jr_path = "../3_deploy/modelzoo/yolov8_cls/imodel/16/"
+
+[quantize]
+forward_mode = "image" 
+saturation = "ems"
+forward_dir = "./qtset/imagenet"
+forward_list = "./qtset/imagenet.txt "
+batch = 1
+bits = 16
+json = "../3_deploy/modelzoo/yolov8_cls/imodel/16/yolov8s_cls_optimized.json"
+raw = "../3_deploy/modelzoo/yolov8_cls/imodel/16/yolov8s_cls_optimized.raw"
+jr_path = "../3_deploy/modelzoo/yolov8_cls/imodel/16/"
+per = "channel"
+target = "buyi"
+
+[adapt]
+target = "BUYI"
+json = "../3_deploy/modelzoo/yolov8_cls/imodel/16/yolov8s_cls_quantized.json"
+raw = "../3_deploy/modelzoo/yolov8_cls/imodel/16/yolov8s_cls_quantized.raw"
+jr_path = "../3_deploy/modelzoo/yolov8_cls/imodel/16/"
+pass_on =  "customop.ImageMakePass"
+custom_config = "config/customop/yolov8_cls.toml"
+
+[generate]
+json = "../3_deploy/modelzoo/yolov8_cls/imodel/16/yolov8s_cls_adapted.json"
+raw = "../3_deploy/modelzoo/yolov8_cls/imodel/16/yolov8s_cls_adapted.raw"
+jr_path = "../3_deploy/modelzoo/yolov8_cls/imodel/16/"
+log_path = "./logs/"
+
+[run]
+log_time = true
+log_io = true
+dump_format = "SFB"
+json = "../3_deploy/modelzoo/yolov8/imodel/16/yolov8s_cls_BY.json"
+raw = "../3_deploy/modelzoo/yolov8/imodel/16/yolov8s_cls_BY.raw"
+input = "./qtset/imagenet/ILSVRC2012_val_00000441.JPEG"
+log_path = "./logs/"

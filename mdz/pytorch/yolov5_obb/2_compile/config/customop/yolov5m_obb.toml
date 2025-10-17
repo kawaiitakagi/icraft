@@ -1,0 +1,19 @@
+[DetPost]
+forward_dll = ""
+forward_so = ""
+quantized = true
+
+thr_f = 0.1 # 阈值 测精度时改为0.001
+cmp_en = 1  # 是否做阈值比较
+
+#要改
+groups = 3  ## 有⼏个输出head（*注意：不是输出层的个数。⽐如yolox有3个head，9个输出层）
+anchor_num = 3 ## 每个cell对应⼏个anchor；anchor free的设为1；
+position = 5 ## 代表需要筛选的阈值所在的位置。例如，yolov5的score是在第5个通道，则设置为5。
+
+[ImageMake]
+forward_dll = ""
+forward_so = ""
+no_imkpad = 1
+#mode = 1
+quantized = true

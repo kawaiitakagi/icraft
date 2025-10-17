@@ -1,0 +1,37 @@
+
+  # "p": "parsed",
+  # "o": "optimized",
+  # "q": "quantized",
+  # "a": "adapted",
+  # "g": "BY",
+imodel: 
+  cudamode: false  
+  mmu: true
+  speedmode: false
+  compressFtmp: false
+  dir: ../imodel/8
+  stage: g
+  sim: false
+  ip: 192.168.125.184
+  save: true
+  show: false
+ 
+dataset:
+  dir: ../io/input
+  list: ../io/cocoval_2017.txt
+  names: ../names/coco.names
+  res: ../io/output_8n_16_pc
+
+param:
+  conf: 0.001
+  iou_thresh: 0.65
+  multilabel: true
+  number_of_class: 80
+  number_of_head: 3
+  anchors: []
+  fpga_nms: true
+
+camera:
+  do: true
+  camerah: 1080
+  cameraw: 1920

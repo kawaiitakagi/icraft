@@ -1,0 +1,3 @@
+[InputFold]
+Meaningful_id = "0;1;2" #有用的ifm
+IfmsPath = "qtset/mixformerv2-small-foldparam.txt"

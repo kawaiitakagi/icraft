@@ -1,0 +1,53 @@
+[parse]
+net_name = "strongReid"
+framework = "onnx"
+inputs = [ 1, 256, 128, 3]
+inputs_layout = "NHWC"
+pre_method = "resize"
+pre_scale = "58.395,57.12,57.375"
+pre_mean = "123.675,116.28,103.53"
+channel_swap = [ 0, 1, 2]
+network = "fmodel/strongReid_256x128.onnx"
+jr_path = "../3_deploy/modelzoo/strongReid/imodel/8/"
+
+
+[optimize]
+target = "BUYI"
+json = "../3_deploy/modelzoo/strongReid/imodel/8/strongReid_parsed.json"
+raw = "../3_deploy/modelzoo/strongReid/imodel/8/strongReid_parsed.raw"
+jr_path = "../3_deploy/modelzoo/strongReid/imodel/8/"
+
+[quantize]
+forward_mode = "image"
+saturation = "kld"
+forward_dir = "./qtset/strongReid"
+forward_list = "./qtset/strongReid.txt"
+bits = 8
+json = "../3_deploy/modelzoo/strongReid/imodel/8/strongReid_optimized.json"
+raw = "../3_deploy/modelzoo/strongReid/imodel/8/strongReid_optimized.raw"
+jr_path = "../3_deploy/modelzoo/strongReid/imodel/8/"
+per = "tensor"
+target = "buyi"
+
+[adapt]
+target = "BUYI"
+json = "../3_deploy/modelzoo/strongReid/imodel/8/strongReid_quantized.json"
+raw = "../3_deploy/modelzoo/strongReid/imodel/8/strongReid_quantized.raw"
+jr_path = "../3_deploy/modelzoo/strongReid/imodel/8/"
+pass_on =  "customop.ImageMakePass"
+custom_config = "config/customop/ImageMake.toml"
+
+[generate]
+json = "../3_deploy/modelzoo/strongReid/imodel/8/strongReid_adapted.json"
+raw = "../3_deploy/modelzoo/strongReid/imodel/8/strongReid_adapted.raw"
+jr_path = "../3_deploy/modelzoo/strongReid/imodel/8/"
+no_mergeops = true
+etmopt = 0
+[run]
+log_time = true
+log_io = true
+dump_format = "SFB"
+json = "../3_deploy/modelzoo/strongReid/imodel/8/strongReid_BY.json"
+raw = "../3_deploy/modelzoo/strongReid/imodel/8/strongReid_BY.raw"
+input = "./qtset/strongReid/0001_c4s6_000810_00.jpg"
+backends = "BY,socket://ql100aiu@192.168.125.166:9981?npu=0x40000000&dma=0x80000000;Host"

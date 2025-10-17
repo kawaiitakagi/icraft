@@ -1,0 +1,22 @@
+
+  # "p": "parsed",
+  # "o": "optimized",
+  # "q": "quantized",
+  # "a": "adapted",
+  # "g": "BY",
+imodel: 
+  mmu: true
+  cudamode: true
+  speedmode: false
+  compressFtmp: false
+  dir: ../imodel/8
+  stage: g
+  sim: false
+  ip: 192.168.125.166
+  save: true
+  show: false
+  val: true
+dataset:
+  dir: "//192.168.121.10/04_Model zoo/datasets/Market"
+  list: ""
+  res: ../io/output/

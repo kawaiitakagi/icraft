@@ -1,0 +1,35 @@
+
+  # "p": "parsed",
+  # "o": "optimized",
+  # "q": "quantized",
+  # "a": "adapted",
+  # "g": "BY",
+imodel: 
+  mmu: true
+  speedmode: false
+  compressFtmp: false
+  net_dir: ../imodel/8/
+  stage: g
+  sim: false
+  ip: 192.168.125.185
+  save: true
+  show: true
+
+
+ 
+dataset:
+  dir: ../io/input/
+  list: ../io/face_img_list.txt
+  res: ../io/output/
+
+param:
+  test_id: 0  # person_id
+  batch_size: 1 
+  dataloader:
+    num_workers: 1
+    pin_memory: False
+
+camera:
+  do: true
+  camerah: 1080
+  cameraw: 1920

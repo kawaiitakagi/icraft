@@ -1,0 +1,53 @@
+[parse]
+net_name = "yolox_s"
+framework = "pytorch"
+inputs = [ 1, 640, 640, 3]
+inputs_layout = "NHWC"
+pre_method = "resize"
+pre_scale = [ 1.0, 1.0, 1.0]
+pre_mean = [ 0.0, 0.0, 0.0]
+channel_swap = [ 2, 1, 0]
+network = "fmodel/yolox_s_640x640_traced.pt"
+jr_path = "../3_deploy/modelzoo/yolox/imodel/8/"
+frame_version = "1.9"
+
+[optimize]
+target = "BUYI"
+json = "../3_deploy/modelzoo/yolox/imodel/8/yolox_s_parsed.json"
+raw = "../3_deploy/modelzoo/yolox/imodel/8/yolox_s_parsed.raw"
+jr_path = "../3_deploy/modelzoo/yolox/imodel/8/"
+
+[quantize]
+forward_mode = "image"
+saturation = "kld"
+forward_dir = "./qtset/coco"
+forward_list = "./qtset/coco.txt"
+bits = 8
+json = "../3_deploy/modelzoo/yolox/imodel/8/yolox_s_optimized.json"
+raw = "../3_deploy/modelzoo/yolox/imodel/8/yolox_s_optimized.raw"
+jr_path = "../3_deploy/modelzoo/yolox/imodel/8/"
+per = "tensor"
+target = "buyi"
+
+[adapt]
+target = "BUYI"
+json = "../3_deploy/modelzoo/yolox/imodel/8/yolox_s_quantized.json"
+raw = "../3_deploy/modelzoo/yolox/imodel/8/yolox_s_quantized.raw"
+jr_path = "../3_deploy/modelzoo/yolox/imodel/8/"
+pass_on =  "customop.ImageMakePass,customop.DetPostPass"
+custom_config = "config/customop/yolox.toml"
+
+[generate]
+json = "../3_deploy/modelzoo/yolox/imodel/8/yolox_s_adapted.json"
+raw = "../3_deploy/modelzoo/yolox/imodel/8/yolox_s_adapted.raw"
+jr_path = "../3_deploy/modelzoo/yolox/imodel/8/"
+log_path = "./logs/"
+
+[run]
+log_time = true
+log_io = true
+dump_format = "SFB"
+json = "../3_deploy/modelzoo/yolox/imodel/8/yolox_s_BY.json"
+raw = "../3_deploy/modelzoo/yolox/imodel/8/yolox_s_BY.raw"
+input = "./qtset/coco/bus.jpg"
+log_path = "./logs/"

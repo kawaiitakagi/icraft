@@ -1,0 +1,55 @@
+[parse]
+net_name = "UFLD"
+framework = "pytorch"
+frame_version = "1.9"
+inputs = [1, 288, 800, 3]
+inputs_layout = "NHWC"
+pre_method = "resize"
+pre_scale = [1.0, 1.0, 1.0]
+pre_mean = [103.939, 116.779, 123.68]
+channel_swap = [0, 1, 2]
+network = "fmodel/UFLD_288x800.pt"
+jr_path = "../3_deploy/modelzoo/UFLD/imodel/16/"
+
+[optimize]
+target = "BUYI"
+json = "../3_deploy/modelzoo/UFLD/imodel/16/UFLD_parsed.json"
+raw = "../3_deploy/modelzoo/UFLD/imodel/16/UFLD_parsed.raw"
+jr_path = "../3_deploy/modelzoo/UFLD/imodel/16/"
+
+[quantize]
+forward_mode = "image" 
+saturation = "kld"
+forward_dir = "./qtset/tuSimple"
+forward_list = "./qtset/tuSimple.txt "
+batch = 1
+bits = 16
+json = "../3_deploy/modelzoo/UFLD/imodel/16/UFLD_optimized.json"
+raw = "../3_deploy/modelzoo/UFLD/imodel/16/UFLD_optimized.raw"
+jr_path = "../3_deploy/modelzoo/UFLD/imodel/16/"
+per = "channel"
+target = "buyi"
+
+[adapt]
+target = "BUYI"
+json = "../3_deploy/modelzoo/UFLD/imodel/16/UFLD_quantized.json"
+raw = "../3_deploy/modelzoo/UFLD/imodel/16/UFLD_quantized.raw"
+jr_path = "../3_deploy/modelzoo/UFLD/imodel/16/"
+pass_on =  "customop.ImageMakePass"
+custom_config = "config/customop/UFLD.toml"
+
+[generate]
+json = "../3_deploy/modelzoo/UFLD/imodel/16/UFLD_adapted.json"
+raw = "../3_deploy/modelzoo/UFLD/imodel/16/UFLD_adapted.raw"
+jr_path = "../3_deploy/modelzoo/UFLD/imodel/16/"
+
+
+[run]
+log_time = true
+log_io = true
+dump_format = "SFB"
+json = "../3_deploy/modelzoo/UFLD/imodel/16/UFLD_BY.json"
+raw = "../3_deploy/modelzoo/UFLD/imodel/16/UFLD_BY.raw"
+input = "./qtset/tuSimple/10.jpg"
+backends = "BY,socket://ql100aiu@192.168.125.184:9981?npu=0x40000000&dma=0x80000000;Host"
+

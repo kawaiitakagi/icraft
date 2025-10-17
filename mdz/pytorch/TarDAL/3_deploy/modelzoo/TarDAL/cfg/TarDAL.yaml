@@ -1,0 +1,33 @@
+
+  # "p": "parsed",
+  # "o": "optimized",
+  # "q": "quantized",
+  # "a": "adapted",
+  # "g": "BY",
+imodel: 
+  cudamode: false  
+  mmu: true
+  speedmode: false
+  compressFtmp: false
+  dir: ../imodel/8
+  stage: g
+  sim: false
+  ip: 192.168.125.89
+  save: true
+  show: true
+ 
+dataset:
+  dir1: ../io/vi
+  dir2: ../io/ir
+  list: ../io/list.txt
+  names: none
+  res: ../io/output
+
+param:
+  
+ 
+
+camera:
+  do: false
+  camerah: 768
+  cameraw: 1024

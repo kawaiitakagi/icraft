@@ -1,0 +1,30 @@
+
+  # "p": "parsed",
+  # "o": "optimized",
+  # "q": "quantized",
+  # "a": "adapted",
+  # "g": "BY",
+imodel: 
+  cudamode: false  
+  mmu: true
+  speedmode: false
+  compressFtmp: false
+  dir: ../imodel/8
+  stage: g
+  sim: false
+  ip: 192.168.125.184
+  save: true
+  show: false
+  timeRes: false   # save time results
+  metricRes: true # save metric result
+ 
+dataset:
+  dir: ../io/input/shapenetcore_partanno_segmentation_benchmark_v0
+  res: ../io/output
+  
+param:
+  class_choice: Airplane
+camera:
+  do: true
+  camerah: 1080
+  cameraw: 1920

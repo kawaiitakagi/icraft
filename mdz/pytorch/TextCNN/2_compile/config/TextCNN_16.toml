@@ -1,0 +1,44 @@
+[parse]
+net_name = "TextCNN"
+framework = "pytorch"
+inputs = [1, 32, 300]
+inputs_layout = "FD"
+pre_method = "nop"
+pre_scale = "nop"
+pre_mean = "nop"
+channel_swap = "nop"
+network = "../2_compile/fmodel/TextCNN_traced.pt"
+jr_path = "./imodel/16/"
+frame_version = "1.9"
+
+[optimize]
+target = "BUYI"
+json = "./imodel/16/TextCNN_parsed.json"
+raw = "./imodel/16/TextCNN_parsed.raw"
+jr_path = "./imodel/16/"
+
+[quantize]
+forward_mode = "image"
+saturation = "null"
+forward_dir = "./qtset/TextCNN"
+forward_list = "./qtset/TextCNN.txt "
+bits = 16
+json = "./imodel/16/TextCNN_optimized.json"
+raw = "./imodel/16/TextCNN_optimized.raw"
+jr_path = "./imodel/16/"
+per = "tensor"
+target = "buyi"
+
+[adapt]
+target = "BUYI"
+json = "./imodel/16/TextCNN_quantized.json"
+raw = "./imodel/16/TextCNN_quantized.raw"
+jr_path = "./imodel/16/"
+
+[generate]
+json = "./imodel/16/TextCNN_adapted.json"
+raw = "./imodel/16/TextCNN_adapted.raw"
+# jr_path = "./imodel/16/"
+jr_path = "../3_deploy/modelzoo/TextCNN/imodel/16/"
+log_path = "./logs/"
+

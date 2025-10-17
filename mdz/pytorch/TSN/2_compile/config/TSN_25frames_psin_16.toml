@@ -1,0 +1,52 @@
+[parse]
+net_name = "TSN_25frames_psin_16bit"
+framework = "onnx"
+inputs = [ 1, 224, 224, 3]
+inputs_layout = "NHWC"
+pre_method = "nop"
+#post_method = "nop"
+pre_scale = "58.395,57.12,57.375"
+pre_mean = "123.675,116.28,103.53"
+channel_swap = "0,1,2"
+network = "fmodel/TSN_traced_25frames_1x3x224x224.onnx"
+jr_path = "../3_deploy/modelzoo/TSN/imodel/TSN_25frames_psin_16bit/"
+
+
+
+[optimize]
+target = "BUYI"
+json = "../3_deploy/modelzoo/TSN/imodel/TSN_25frames_psin_16bit/TSN_25frames_psin_16bit_parsed.json"
+raw = "../3_deploy/modelzoo/TSN/imodel/TSN_25frames_psin_16bit/TSN_25frames_psin_16bit_parsed.raw"
+jr_path = "../3_deploy/modelzoo/TSN/imodel/TSN_25frames_psin_16bit/"
+
+
+[quantize]
+forward_mode = "image"
+saturation = "null"
+forward_dir = "./qtset/TSN"
+forward_list = "./qtset/TSN.txt"
+bits = 16
+json = "../3_deploy/modelzoo/TSN/imodel/TSN_25frames_psin_16bit/TSN_25frames_psin_16bit_optimized.json"
+raw = "../3_deploy/modelzoo/TSN/imodel/TSN_25frames_psin_16bit/TSN_25frames_psin_16bit_optimized.raw"
+jr_path = "../3_deploy/modelzoo/TSN/imodel/TSN_25frames_psin_16bit/"
+per = "channel"
+target = "buyi"
+
+
+[adapt]
+target = "BUYI"
+json = "../3_deploy/modelzoo/TSN/imodel/TSN_25frames_psin_16bit/TSN_25frames_psin_16bit_quantized.json"
+raw = "../3_deploy/modelzoo/TSN/imodel/TSN_25frames_psin_16bit/TSN_25frames_psin_16bit_quantized.raw"
+jr_path = "../3_deploy/modelzoo/TSN/imodel/TSN_25frames_psin_16bit/"
+pass_on =  "customop.ImageMakePass"
+custom_config = "config/customop/TSN.toml"
+
+[generate]
+json = "../3_deploy/modelzoo/TSN/imodel/TSN_25frames_psin_16bit/TSN_25frames_psin_16bit_adapted.json"
+raw = "../3_deploy/modelzoo/TSN/imodel/TSN_25frames_psin_16bit/TSN_25frames_psin_16bit_adapted.raw"
+jr_path = "../3_deploy/modelzoo/TSN/imodel/TSN_25frames_psin_16bit/"
+no_mergeops = true
+etmopt = 0
+ocmopt = 0
+
+

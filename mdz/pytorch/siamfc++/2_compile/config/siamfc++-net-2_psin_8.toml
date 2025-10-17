@@ -1,0 +1,48 @@
+[parse]
+net_name = "siamfc++-net-2"
+framework = "pytorch"
+inputs = [ [1,303,303,3],[256,1,4,4],[256,1,4,4]]
+inputs_layout = "NHWC;FD;FD"
+pre_method = "nop;nop;nop"
+pre_scale = "nop;nop;nop"
+pre_mean = "nop;nop;nop"
+channel_swap = "nop;nop;nop"
+network = "./fmodel/siamfc++-net-2-303x303.pt"
+jr_path = "../3_deploy/modelzoo/siamfc++/imodel/8_siamfc++_net2/"
+frame_version = "1.9"
+
+[optimize]
+target = "BUYI"
+json = "../3_deploy/modelzoo/siamfc++/imodel/8_siamfc++_net2/siamfc++-net-2_parsed.json"
+raw = "../3_deploy/modelzoo/siamfc++/imodel/8_siamfc++_net2/siamfc++-net-2_parsed.raw"
+jr_path = "../3_deploy/modelzoo/siamfc++/imodel/8_siamfc++_net2/"
+
+[quantize]
+forward_mode = "image"
+saturation = "kld"
+forward_dir = "./qtset/siamfc++-net2"
+forward_list = "./qtset/siamfc++-net2.txt"
+bits = 8
+json = "../3_deploy/modelzoo/siamfc++/imodel/8_siamfc++_net2/siamfc++-net-2_optimized.json"
+raw = "../3_deploy/modelzoo/siamfc++/imodel/8_siamfc++_net2/siamfc++-net-2_optimized.raw"
+jr_path = "../3_deploy/modelzoo/siamfc++/imodel/8_siamfc++_net2/"
+per = "channel"
+target = "buyi"
+no_imagemake = "1,2"
+no_transinput = "1,2"
+
+[adapt]
+target = "BUYI"
+json = "../3_deploy/modelzoo/siamfc++/imodel/8_siamfc++_net2/siamfc++-net-2_quantized.json"
+raw = "../3_deploy/modelzoo/siamfc++/imodel/8_siamfc++_net2/siamfc++-net-2_quantized.raw"
+jr_path = "../3_deploy/modelzoo/siamfc++/imodel/8_siamfc++_net2/"
+pass_on =  "customop.ImageMakePass"
+custom_config = "./config/customop/yolov5_warpaffine.toml"
+
+[generate]
+json = "../3_deploy/modelzoo/siamfc++/imodel/8_siamfc++_net2/siamfc++-net-2_adapted.json"
+raw = "../3_deploy/modelzoo/siamfc++/imodel/8_siamfc++_net2/siamfc++-net-2_adapted.raw"
+jr_path = "../3_deploy/modelzoo/siamfc++/imodel/8_siamfc++_net2/"
+log_path = "./logs/"
+no_mergeops = true
+etmopt = 0

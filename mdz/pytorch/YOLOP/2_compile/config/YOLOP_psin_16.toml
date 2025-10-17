@@ -1,0 +1,55 @@
+[parse]
+net_name = "YOLOP"
+framework = "onnx"
+inputs = [ 1, 640, 640, 3]
+inputs_layout = "NHWC"
+pre_method = "resize"
+pre_scale = [[ 58.395, 57.12, 57.375]]
+pre_mean = [[ 123.675, 116.28, 103.53]]
+channel_swap = [[0, 1, 2]] #rgb
+network = "./fmodel/yolop_1x3x640x640_traced.onnx"
+jr_path = "../3_deploy/modelzoo/YOLOP/imodel/16/"
+
+[optimize]
+target = "BUYI"
+json = "../3_deploy/modelzoo/YOLOP/imodel/16/YOLOP_parsed.json"
+raw = "../3_deploy/modelzoo/YOLOP/imodel/16/YOLOP_parsed.raw"
+jr_path = "../3_deploy/modelzoo/YOLOP/imodel/16/"
+
+[quantize]
+forward_mode = "image"
+saturation = "kld"
+forward_dir = "./qtset/YOLOP/"
+forward_list = "./qtset/YOLOP.txt"
+bits = 16
+json = "../3_deploy/modelzoo/YOLOP/imodel/16/YOLOP_optimized.json"
+raw = "../3_deploy/modelzoo/YOLOP/imodel/16/YOLOP_optimized.raw"
+jr_path = "../3_deploy/modelzoo/YOLOP/imodel/16/"
+per = "channel"
+target = "buyi"
+
+[adapt]
+target = "BUYI"
+json = "../3_deploy/modelzoo/YOLOP/imodel/16/YOLOP_quantized.json"
+raw = "../3_deploy/modelzoo/YOLOP/imodel/16/YOLOP_quantized.raw"
+jr_path = "../3_deploy/modelzoo/YOLOP/imodel/16/"
+pass_on =  "customop.ImageMakePass"
+custom_config = "config/customop/YOLOP.toml"
+
+[generate]
+json = "../3_deploy/modelzoo/YOLOP/imodel/16/YOLOP_adapted.json"
+raw = "../3_deploy/modelzoo/YOLOP/imodel/16/YOLOP_adapted.raw"
+jr_path = "../3_deploy/modelzoo/YOLOP/imodel/16/"
+no_mergeops = true
+etmopt = 0
+ocmopt = 0
+
+
+[run]
+log_time = true
+log_io = true
+dump_format = "SFB"
+json = "../3_deploy/modelzoo/YOLOP/imodel/16/YOLOP_BY.json"
+raw = "../3_deploy/modelzoo/YOLOP/imodel/16/YOLOP_BY.raw"
+input = "./qtset/YOLOP/test_1.jpg"
+backends = "BY,socket://ql100aiu@192.168.125.185:9981?npu=0x40000000&dma=0x80000000;Host"

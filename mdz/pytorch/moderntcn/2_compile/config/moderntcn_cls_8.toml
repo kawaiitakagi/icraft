@@ -1,0 +1,50 @@
+[parse]
+net_name = 'moderntcn_cls'
+framework = 'pytorch'
+inputs = [1,405,61]
+inputs_layout = 'FD'
+pre_method = 'nop'
+pre_mean = 'nop'
+pre_scale = 'nop'
+channel_swap = 'nop'
+network = './fmodel/moderntcn_cls.pt'
+jr_path = '../3_deploy/modelzoo/moderntcn/imodel/cls/8' 
+frame_version = '1.9'
+
+[optimize]
+target = 'BUYI'
+json = '../3_deploy/modelzoo/moderntcn/imodel/cls/8/moderntcn_cls_parsed.json'
+raw = '../3_deploy/modelzoo/moderntcn/imodel/cls/8/moderntcn_cls_parsed.raw'
+jr_path = '../3_deploy/modelzoo/moderntcn/imodel/cls/8'
+pass_off ="icraft.RemoveUselessMaxpoolPass"
+
+[quantize]
+forward_mode = 'image'
+saturation = 'kld'
+forward_dir = './qtset/cls'
+forward_list = './qtset/cls.txt'
+bits = 8
+json = '../3_deploy/modelzoo/moderntcn/imodel/cls/8/moderntcn_cls_optimized.json'
+raw = '../3_deploy/modelzoo/moderntcn/imodel/cls/8/moderntcn_cls_optimized.raw'
+jr_path = '../3_deploy/modelzoo/moderntcn/imodel/cls/8'
+per = 'tensor'
+target = "buyi"
+
+[adapt]
+target = 'BUYI'
+json = '../3_deploy/modelzoo/moderntcn/imodel/cls/8/moderntcn_cls_quantized.json'
+raw = '../3_deploy/modelzoo/moderntcn/imodel/cls/8/moderntcn_cls_quantized.raw'
+jr_path = '../3_deploy/modelzoo/moderntcn/imodel/cls/8'
+pass_on ="icraft.RemoveUselessMaxpoolPass,icraft.MotcnPass"
+
+[generate]
+json = '../3_deploy/modelzoo/moderntcn/imodel/cls/8/moderntcn_cls_adapted.json'
+raw = '../3_deploy/modelzoo/moderntcn/imodel/cls/8/moderntcn_cls_adapted.raw'
+jr_path = '../3_deploy/modelzoo/moderntcn/imodel/cls/8'
+log_path = './logs/'
+# no_mergeops = true
+
+
+
+
+

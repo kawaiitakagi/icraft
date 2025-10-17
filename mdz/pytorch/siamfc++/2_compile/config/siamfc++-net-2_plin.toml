@@ -1,0 +1,60 @@
+[parse]
+net_name = "siamfc++-net-2"
+framework = "pytorch"
+inputs = [ [1,303,303,3],[256,1,4,4],[256,1,4,4]]
+inputs_layout = "NHWC;FD;FD"
+pre_method = "nop;nop;nop"
+pre_scale = "nop;nop;nop"
+pre_mean = "nop;nop;nop"
+channel_swap = "nop;nop;nop"
+network = "./fmodel/siamfc++-net-2-303x303.pt"
+jr_path = "./imodel/plin_siamfc++_net2/"
+frame_version = "1.9"
+
+[optimize]
+target = "BUYI"
+json = "./imodel/plin_siamfc++_net2/siamfc++-net-2_parsed.json"
+raw = "./imodel/plin_siamfc++_net2/siamfc++-net-2_parsed.raw"
+jr_path = "./imodel/plin_siamfc++_net2/"
+
+[quantize]
+forward_mode = "image"
+saturation = "kld"
+forward_dir = "./qtset/siamfc++-net2_plin"
+forward_list = "./qtset/siamfc++-net2_plin.txt"
+bits = 8
+batch = 1
+json = "./imodel/plin_siamfc++_net2/siamfc++-net-2_optimized.json"
+raw = "./imodel/plin_siamfc++_net2/siamfc++-net-2_optimized.raw"
+jr_path = "./imodel/plin_siamfc++_net2/"
+per = "channel"
+target = "buyi"
+no_imagemake = "1,2"
+no_transinput = "1,2"
+
+[adapt]
+target = "BUYI"
+json = "./imodel/plin_siamfc++_net2/siamfc++-net-2_quantized.json"
+raw = "./imodel/plin_siamfc++_net2/siamfc++-net-2_quantized.raw"
+jr_path = "./imodel/plin_siamfc++_net2/"
+pass_on =  "customop.ImageMakePass,customop.WarpAffinePass"
+custom_config = "config/customop/yolov5_warpaffine.toml"
+
+[generate]
+json = "./imodel/plin_siamfc++_net2/siamfc++-net-2_adapted.json"
+raw = "./imodel/plin_siamfc++_net2/siamfc++-net-2_adapted.raw"
+jr_path = "../3_deploy/modelzoo/siamfc++/imodel/plin_siamfc++_net2/"
+log_path = "./logs/"
+no_mergeops = true
+etmopt = 0
+
+[run]
+log_time = true
+log_io = true
+dump_format = "SFB"
+json = "../3_deploy/modelzoo/siamfc++/imodel//siamfc++-net-2_BY.json"
+raw = "../3_deploy/modelzoo/siamfc++/imodel//siamfc++-net-2_BY.raw"
+input = "D:/code/VOT/dataset/LaSOT/test/airplane-1/img/00000001.jpg;./qtset/siamfc++-net2/37.ftmp;./qtset/siamfc++-net2/43.ftmp"
+backends = "BY,socket://ql100aiu@192.168.125.178:9981?npu=0x40000000&dma=0x80000000;Host"
+log_path = "./logs/"
+close_mmu = true

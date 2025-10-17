@@ -1,0 +1,52 @@
+[parse]
+net_name = "A2Net"
+framework = "onnx"
+inputs = [[ 1, 256, 256, 3],[ 1, 256, 256, 3]]
+inputs_layout = "NHWC;NHWC"
+pre_method = "nop;nop"
+pre_scale = [[ 58.395, 57.12, 57.375],[ 58.395, 57.12, 57.375]]
+pre_mean = [[ 123.675, 116.28, 103.53],[ 123.675, 116.28, 103.53]]
+channel_swap = [[0, 1, 2],[0, 1, 2]]
+network = "fmodel/A2Net_256x256_traced.onnx"
+jr_path = "../3_deploy/modelzoo/A2Net/imodel/16/"
+
+[optimize]
+target = "BUYI"
+json = "../3_deploy/modelzoo/A2Net/imodel/16/A2Net_parsed.json"
+raw = "../3_deploy/modelzoo/A2Net/imodel/16/A2Net_parsed.raw"
+jr_path = "../3_deploy/modelzoo/A2Net/imodel/16/"
+
+[quantize]
+forward_mode = "image"
+saturation = "kld"
+forward_dir = "./qtset/A2Net/"
+forward_list = "./qtset/A2Net.txt"
+bits = 16
+json = "../3_deploy/modelzoo/A2Net/imodel/16/A2Net_optimized.json"
+raw = "../3_deploy/modelzoo/A2Net/imodel/16/A2Net_optimized.raw"
+jr_path = "../3_deploy/modelzoo/A2Net/imodel/16/"
+per = "tensor"
+target = "buyi"
+
+[adapt]
+target = "BUYI"
+json = "../3_deploy/modelzoo/A2Net/imodel/16/A2Net_quantized.json"
+raw = "../3_deploy/modelzoo/A2Net/imodel/16/A2Net_quantized.raw"
+jr_path = "../3_deploy/modelzoo/A2Net/imodel/16/"
+#pass_on =  "customop.ImageMakePass"
+#custom_config = "config/customop/A2Net.toml"
+
+[generate]
+json = "../3_deploy/modelzoo/A2Net/imodel/16/A2Net_adapted.json"
+raw = "../3_deploy/modelzoo/A2Net/imodel/16/A2Net_adapted.raw"
+jr_path = "../3_deploy/modelzoo/A2Net/imodel/16/"
+log_path = "./logs/"
+
+[run]
+log_time = true
+log_io = true
+dump_format = "SFB"
+json = "../3_deploy/modelzoo/A2Net/imodel/16/A2Net_BY.json"
+raw = "../3_deploy/modelzoo/A2Net/imodel/16/A2Net_BY.raw"
+input = "./qtset/A2Net/test_2_0000_0000_A.png;./qtset/A2Net/test_2_0000_0000_B.png"
+log_path = "./logs/"

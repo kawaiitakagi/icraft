@@ -1,0 +1,32 @@
+  # "p": "parsed",
+  # "o": "optimized",
+  # "q": "quantized",
+  # "a": "adapted",
+  # "g": "BY",
+imodel: 
+  cudamode: false  
+  mmu: true
+  speedmode: false
+  compressFtmp: false
+  dir: ../imodel/8
+  stage: g
+  sim: false
+  ip: 192.168.125.184
+  save: true
+  show: true
+ 
+dataset:
+  dir: ../io/input
+  list: ../io/ShuffleNet_input.txt
+  names: ../names/imagenet.names
+  res: ../io/output/
+
+param:
+  resize_hw: [256,256]
+  crop_hw: [224,224]
+  number_of_class: 1000
+
+camera:
+  do: true
+  camerah: 1080
+  cameraw: 1920

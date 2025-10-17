@@ -1,0 +1,83 @@
+The version is: v20250226103334
+
+The update log:
+******update time: 2025-02-26 10:33:34 ******
+🐞 fix: copyMakeBorder边界值修正为114
+******update time: 2025-02-26 10:22:39 ******
+📃 docs: 修正version.log
+******update time: 2025-02-26 10:20:56 ******
+🐞 fix: 默认文件打开格式为UTF-8
+******update time: 2025-02-26 10:18:18 ******
+📃 docs: 修正version.log
+🎈 perf(升级netinfo类和picpre类为基类,144->114):
+Update version
+docs: 📝添加numpy2Tensor接口使用说明
+******update time: 2025-02-19 09:49:46 ******
+chore: 🔧删除log文件
+******update time: 2025-01-10 16:27:10 ******
+docs: 📝添加numpy2Tensor接口使用说明
+fix: 🐛修复getJrPath会遍历子目录的问题
+feat: ✨网络不再默认去除swaporder
+******update time: 2025-01-06 16:32:13 ******
+refactor: 🎨calctime_detail添加修饰器，同参数输入仅运行一次
+******update time: 2025-01-06 15:18:55 ******
+fix: 🐛修正合并算子后网络原最大opid逻辑
+******update time: 2024-12-24 14:16:38 ******
+fix: 🐛netinfo获取detpost_bit前添加判断
+******update time: 2024-12-20 16:18:57 ******
+refactor: 🎨pyrtutils增加netinfo.detpost_bit
+******update time: 2024-12-17 14:45:55 ******
+feat: ✨netinfo添加detpost_bit
+******update time: 2024-12-10 10:20:28 ******
+feat: ✨新增removeOutputCast接口
+******update time: 2024-12-10 09:58:22 ******
+feat: ✨去除在netinfo获取o_scale时候的warning
+******update time: 2024-12-06 16:47:06 ******
+build: 👷更新setup中pyrtutils版本
+******update time: 2024-12-06 16:03:52 ******
+feat: ✨增加cout输出icraft中某些数据类型所需要的头文件
+******update time: 2024-12-05 11:28:42 ******
+fix: 🐛removeOutputCast适配3.7.0版本数据类型
+******update time: 2024-12-05 11:24:57 ******
+
+******update time: 2024-11-21 16:48:38 ******
+fix: 🐛修复python计时送入网络无法开启speedmode的情况
+docs: 📝文档纠错
+******update time: 2024-11-07 15:39:07 ******
+feat: ✨openDevice增加cuda_Mode接口
+feat: ✨openDevice接口增加cuda_Mode开关
+******update time: 2024-10-23 16:05:49 ******
+perf: 👌更改netinfo类中获取网络bit数的方式为通过网络中第一个compile_target为BuyiTargetNode/FPGATargetNode的算子输出获取
+feat: ✨pyrtutils添加plddr_memcpy接口,show_log 参数默认False,不打印log信息。
+******update time: 2024-09-29 18:02:12 ******
+fix: 🐛添加nms_hard送入fpganms时候对idx的数量限制
+******update time: 2024-09-18 11:45:36 ******
+fix: 🐛修改numpy2Tensor接口,适配3.6.2版本icraft，限制参数2输入不能是networkview
+fix: 🐛恢复netinfo原来的获取inp_shape_opid的逻辑
+******update time: 2024-09-11 17:42:11 ******
+docs: 📝重命名API_reference文档，保证可跳转
+******update time: 2024-09-11 17:27:54 ******
+docs: 📝更新calctime_detail及getOutputNormratio/getInputNormratio的说明文档
+******update time: 2024-09-11 17:20:43 ******
+feat: ✨引入getOutputNormratio/getInputNormratio函数，可以传入Network/Networkview，获取网络输入输出的Normratio
+refactor: 🎨升级c++&python下的calctime_detail函数,在原有功能的基础上,增加输出网络的传入/传出/npu/cpu耗时信息
+******update time: 2024-09-10 20:14:48 ******
+docs: 📝更新python api readme 主要添加了numpy2Tensor接口和netinfo的介绍
+feat: ✨添加了numpy2Tensor接口，利用numpy数据并传入network或者value，完成tensor构造
+refactor: 🎨优化了netinfo获取inp_shape_opid的逻辑，理论上对于单输入网络保证获取正确的id
+******update time: 2024-09-09 10:38:14 ******
+docs: 📝更新et_device中对应函数修改后的说明内容
+refactor: 🎨增加cout打印fpgaNms和fpgaArgmax2d中异常抛出信息,更改所有fpga算子中reg_base_addr为外部可配.且默认为当前版本下正确基地址.
+******update time: 2024-09-02 11:31:49 ******
+chore: 🔧fpgaArgmax2d中ARGMAX2D_GP_BASE更新，对应位流版本为24083004
+******update time: 2024-08-28 10:33:58 ******
+docs: 📝修正readme中冗余错误部分
+******update time: 2024-08-28 10:31:00 ******
+docs: 📝初始化readme、c++ API 和Python API reference
+feat: ✨et_device新增fpgaWarpaffine\fpgaArgmax2d函数,重写nms_hard、dmaInit、dma_imk_Init，将其中与硬件相关的部分代码重新包成函数fpgaNms和fpgaDma
+feat: ✨icraft_utils 新增removeInputCast\removeOutputCast函数
+******update time: 2024-08-21 15:24:24 ******
+feat: ✨更新python 版本的计时函数和计时分析函数
+feat: ✨修改calctime_detail打印信息&关闭netinfo op输出
+feat: ✨更新version.log模板&升级githooks,git push自动添加commit信息到version.log
+

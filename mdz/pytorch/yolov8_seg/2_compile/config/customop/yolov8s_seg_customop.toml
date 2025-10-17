@@ -1,0 +1,14 @@
+[ImageMake]
+forward_dll = ""
+forward_so = ""
+no_imkpad = 1
+
+[DetPost]
+forward_dll = ""
+forward_so = ""
+thr_f = 0.1 # 阈值
+cmp_en = 1  # 是否做阈值比较
+groups = 3        # 几个head
+anchor_num = 1    # 每个cell对应几个anchor
+position = -1     # score在第几个通道
+config_id = "0,1,2,3,4,5,6,7,8"

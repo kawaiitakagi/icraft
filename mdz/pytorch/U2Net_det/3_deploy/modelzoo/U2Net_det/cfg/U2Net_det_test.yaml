@@ -1,0 +1,31 @@
+
+  # "p": "parsed",
+  # "o": "optimized",
+  # "q": "quantized",
+  # "a": "adapted",
+  # "g": "BY",
+imodel: 
+  cudamode: false  
+  mmu: true
+  speedmode: false
+  compressFtmp: false
+  dir: ../imodel/8
+  stage: g
+  sim: false
+  ip: 192.168.124.141
+  save: true 
+  show: true
+
+
+dataset:
+  dir: ../io/DUTS-TE/DUTS-TE-Image/
+  list: ../io/DUTS-TE/list.txt
+  res: ../io/output/8/
+
+
+param:
+
+camera:
+  do: true
+  camerah: 1080
+  cameraw: 1920

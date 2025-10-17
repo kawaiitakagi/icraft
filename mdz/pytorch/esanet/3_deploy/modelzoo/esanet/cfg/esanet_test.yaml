@@ -1,0 +1,21 @@
+
+  # "p": "parsed",
+  # "o": "optimized",
+  # "q": "quantized",
+  # "a": "adapted",
+  # "g": "BY",
+imodel: 
+  mmu: true
+  speedmode: false
+  compressFtmp: false
+  dir: ../imodel/8
+  stage: g
+  sim: true
+  ip: 192.168.124.134
+  save: true
+  show: true
+ 
+dataset:
+  dir: ../io/sample
+  list: ../io/sample.txt
+  res: ../io/output

@@ -1,0 +1,35 @@
+
+  # "p": "parsed",
+  # "o": "optimized",
+  # "q": "quantized",
+  # "a": "adapted",
+  # "g": "BY",
+imodel: 
+  cudamode: false  
+  mmu: true
+  speedmode: false
+  compressFtmp: false
+  dir: ../imodel/16
+  stage: g
+  sim: false
+  ip: 192.168.125.89
+  save: true
+  show: true
+ 
+dataset:
+  dir1: ../io/image
+  dir2: ../io/velodyne
+  dir3: ../io/calib
+  list: ../io/list.txt
+  names: ../names/kitti.names
+  res: ../io/output
+
+param:
+  conf: 0.2
+  multilabel: true
+  number_of_class: 3
+
+camera:
+  do: false
+  camerah: 608
+  cameraw: 608

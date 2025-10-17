@@ -1,0 +1,24 @@
+
+  # "p": "parsed",
+  # "o": "optimized",
+  # "q": "quantized",
+  # "a": "adapted",
+  # "g": "BY",
+imodel: 
+  cudamode: false  
+  mmu: true
+  speedmode: false
+  compressFtmp: false
+  dir: ../imodel/8
+  stage: g
+  sim: False
+  ip: 192.168.125.130
+  save: true
+  show: False
+ 
+dataset:
+  dir: ../io/input
+  list: ../io/list.txt
+  names: ../names/imagenet.names
+  res: ../io/output
+

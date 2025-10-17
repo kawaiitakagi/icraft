@@ -1,0 +1,29 @@
+
+  # "p": "parsed",
+  # "o": "optimized",
+  # "q": "quantized",
+  # "a": "adapted",
+  # "g": "BY",
+imodel: 
+  mmu: true
+  speedmode: false
+  compressFtmp: false
+  net1_dir: ../imodel/8_siamrpn++_net1/
+  net2_dir: ../imodel/8_siamrpn++_net2/
+  stage: g
+  sim: false
+  ip: 192.168.125.185
+  save: true
+  show: true
+ 
+dataset:
+  dir: ../io/input/
+  list: ../io/list.txt
+  res: ../io/output/
+
+param:
+
+camera:
+  do: true
+  camerah: 1080
+  cameraw: 1920

@@ -1,0 +1,13 @@
+[ImageMake]
+forward_dll = ""
+forward_so = ""
+no_imkpad = 0
+
+[DetPost]
+forward_dll = ""
+forward_so = ""
+thr_f = 0.1 # 阈值
+cmp_en = 1  # 是否做阈值比较
+groups = 3
+anchor_num = 3
+position = 5

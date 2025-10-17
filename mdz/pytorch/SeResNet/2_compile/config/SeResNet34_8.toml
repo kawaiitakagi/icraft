@@ -1,0 +1,53 @@
+[parse]
+net_name = "SeResNet34"
+framework = "pytorch"
+inputs = [ 1, 224, 224, 3]
+inputs_layout = "NHWC"
+pre_method = "resize"
+pre_scale = [ 58.395, 57.12, 57.375]
+pre_mean = [123.675, 116.28, 103.53]
+channel_swap = [ 0, 1, 2]
+network = "fmodel/SeResNet34_224x224.pt"
+jr_path = "../3_deploy/modelzoo/SeResNet/imodel/8/"
+frame_version = "1.9"
+
+[optimize]
+target = "BUYI"
+json = "../3_deploy/modelzoo/SeResNet/imodel/8/SeResNet34_parsed.json"
+raw = "../3_deploy/modelzoo/SeResNet/imodel/8/SeResNet34_parsed.raw"
+jr_path = "../3_deploy/modelzoo/SeResNet/imodel/8/"
+pass_on = "icraft.ConvertDimFreeOpLayoutPass"
+
+[quantize]
+forward_mode = "image"
+saturation = "kld"
+forward_dir = "./qtset/flower"
+forward_list = "./qtset/flower.txt"
+bits = 8
+batch = 5
+json = "../3_deploy/modelzoo/SeResNet/imodel/8/SeResNet34_optimized.json"
+raw = "../3_deploy/modelzoo/SeResNet/imodel/8/SeResNet34_optimized.raw"
+jr_path = "../3_deploy/modelzoo/SeResNet/imodel/8/"
+per = "tensor"
+target = "buyi"
+
+[adapt]
+target = "BUYI"
+json = "../3_deploy/modelzoo/SeResNet/imodel/8/SeResNet34_quantized.json"
+raw = "../3_deploy/modelzoo/SeResNet/imodel/8/SeResNet34_quantized.raw"
+jr_path = "../3_deploy/modelzoo/SeResNet/imodel/8/"
+pass_on =  "customop.ImageMakePass"
+custom_config = "config/customop/ImageMake.toml"
+
+[generate]
+json = "../3_deploy/modelzoo/SeResNet/imodel/8/SeResNet34_adapted.json"
+raw = "../3_deploy/modelzoo/SeResNet/imodel/8/SeResNet34_adapted.raw"
+jr_path = "../3_deploy/modelzoo/SeResNet/imodel/8/"
+
+[run]
+log_time = true
+log_io = true
+dump_format = "SFB"
+json = "../3_deploy/modelzoo/SeResNet/imodel/8/SeResNet34_BY.json"
+raw = ".../3_deploy/modelzoo/SeResNet/imodel/8/SeResNet34_BY.raw"
+input = "./qtset/coco/bus.jpg"

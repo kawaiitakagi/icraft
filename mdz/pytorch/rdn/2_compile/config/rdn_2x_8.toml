@@ -1,0 +1,51 @@
+[parse]
+net_name = "rdn_2x"
+framework = "pytorch"
+inputs = [ 1, 256, 256, 3]
+inputs_layout = "NHWC"
+pre_method = "nop"
+pre_scale = [ 255.0, 255.0, 255.0]
+pre_mean = [ 0.0, 0.0, 0.0]
+channel_swap = [ 0, 1, 2]
+network = "fmodel/rdn_2x_256x256.pt"
+jr_path = "../3_deploy/modelzoo/rdn/imodel/8/"
+frame_version = "1.9"
+
+[optimize]
+target = "BUYI"
+json = "../3_deploy/modelzoo/rdn/imodel/8/rdn_2x_parsed.json"
+raw = "../3_deploy/modelzoo/rdn/imodel/8/rdn_2x_parsed.raw"
+jr_path = "../3_deploy/modelzoo/rdn/imodel/8/"
+
+[quantize]
+forward_mode = "image"
+saturation = "kld"
+forward_dir = "./qtset/set14_LR_256x256"
+forward_list = "./qtset/set14_LR_256x256.txt"
+bits = 8
+json = "../3_deploy/modelzoo/rdn/imodel/8/rdn_2x_optimized.json"
+raw = "../3_deploy/modelzoo/rdn/imodel/8/rdn_2x_optimized.raw"
+jr_path = "../3_deploy/modelzoo/rdn/imodel/8/"
+per = "tensor"
+target = "buyi"
+
+[adapt]
+target = "BUYI"
+json = "../3_deploy/modelzoo/rdn/imodel/8/rdn_2x_quantized.json"
+raw = "../3_deploy/modelzoo/rdn/imodel/8/rdn_2x_quantized.raw"
+jr_path = "../3_deploy/modelzoo/rdn/imodel/8/"
+pass_on =  "customop.ImageMakePass"
+custom_config = "config/customop/rdn.toml"
+
+[generate]
+json = "../3_deploy/modelzoo/rdn/imodel/8/rdn_2x_adapted.json"
+raw = "../3_deploy/modelzoo/rdn/imodel/8/rdn_2x_adapted.raw"
+jr_path = "../3_deploy/modelzoo/rdn/imodel/8/"
+
+[run]
+log_time = true
+log_io = true
+dump_format = "SFB"
+json = "../3_deploy/modelzoo/rdn/imodel/8/rdn_2x_BY.json"
+raw = "../3_deploy/modelzoo/rdn/imodel/8/rdn_2x_BY.raw"
+input = "./qtset/set14_LR_256x256/img_013_SRF_2_LR_256x256.png"

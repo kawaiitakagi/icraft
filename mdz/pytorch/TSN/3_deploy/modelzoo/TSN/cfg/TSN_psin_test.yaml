@@ -1,0 +1,32 @@
+
+  # "p": "parsed",
+  # "o": "optimized",
+  # "q": "quantized",
+  # "a": "adapted",
+  # "g": "BY",
+imodel: 
+  mmu: false
+  speedmode: true
+  compressFtmp: true
+  dir: ../imodel/TSN_25frames_psin_8bit/
+  stage: g
+  sim: false
+  ip: 192.168.125.185
+  save: true
+  show: true
+ 
+dataset:
+  dir: ../io/Kinetics400/videos_val
+  res: ../io/output/video_metric/
+  list: ../io/Kinetics400/kinetics400_val_list_videos.txt  
+  label_txt: ../io/kinetics_label_map_k400.txt
+
+param:
+  interval: 5
+  num_segments: 25
+
+
+camera:
+  do: true
+  camerah: 1080
+  cameraw: 1920

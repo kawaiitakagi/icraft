@@ -1,0 +1,54 @@
+[parse]
+net_name = "JLDCF"
+framework = "pytorch"
+inputs = [[1, 320, 320, 3], [1, 320, 320, 3]]
+inputs_layout = "NHWC;NHWC"
+pre_method = "nop;nop"
+pre_scale = "nop;nop"
+pre_mean = "nop;nop"
+channel_swap = "nop;nop"
+#pre_scale = "58.395,57.12,57.375;58.395,57.12,57.375"
+#pre_mean = "123.675,116.28,103.53;123.675,116.28,103.53"
+#channel_swap = "2,1,0;2,1,0"
+network = "./fmodel/JLDCF.pt"
+jr_path = "../3_deploy/modelzoo/JL-DCF/imodel/16/"
+frame_version = "1.9"
+
+[optimize]
+target = "BUYI"
+json = "../3_deploy/modelzoo/JL-DCF/imodel/16/JLDCF_parsed.json"
+raw = "../3_deploy/modelzoo/JL-DCF/imodel/16/JLDCF_parsed.raw"
+jr_path = "../3_deploy/modelzoo/JL-DCF/imodel/16/"
+
+[quantize]
+forward_mode = "image"
+saturation = "kld"
+forward_dir = "./qtset/JLDCF"
+forward_list = "./qtset/JLDCF.txt"
+bits = 16
+json = "../3_deploy/modelzoo/JL-DCF/imodel/16/JLDCF_optimized.json"
+raw = "../3_deploy/modelzoo/JL-DCF/imodel/16/JLDCF_optimized.raw"
+jr_path = "../3_deploy/modelzoo/JL-DCF/imodel/16/"
+per = "channel"
+target = "buyi"
+no_transinput = true
+
+[adapt]
+target = "BUYI"
+json = "../3_deploy/modelzoo/JL-DCF/imodel/16/JLDCF_quantized.json"
+raw = "../3_deploy/modelzoo/JL-DCF/imodel/16/JLDCF_quantized.raw"
+jr_path = "../3_deploy/modelzoo/JL-DCF/imodel/16/"
+
+[generate]
+json = "../3_deploy/modelzoo/JL-DCF/imodel/16/JLDCF_adapted.json"
+raw = "../3_deploy/modelzoo/JL-DCF/imodel/16/JLDCF_adapted.raw"
+jr_path = "../3_deploy/modelzoo/JL-DCF/imodel/16/"
+log_path = "./logs/"
+
+[run]
+log_time = true
+log_io = true
+dump_format = "SFB"
+json = "../3_deploy/modelzoo/JL-DCF/imodel/16/JLDCF_parsed.json"
+raw = "../3_deploy/modelzoo/JL-DCF/imodel/16/JLDCF_parsed.raw"
+input = "./qtset/JLDCF/1.jpg;./qtset/JLDCF/1.png"

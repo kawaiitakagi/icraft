@@ -1,0 +1,4 @@
+[ImageMake]
+forward_dll = "C:/Icraft/CLI/bin/customop.ImageMake.dll"
+forward_so = ""
+no_imkpad = 1

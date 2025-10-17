@@ -1,0 +1,23 @@
+
+  # "p": "parsed",
+  # "o": "optimized",
+  # "q": "quantized",
+  # "a": "adapted",
+  # "g": "BY",
+imodel: 
+  cudamode: false  
+  mmu: true
+  speedmode: false
+  compressFtmp: false
+  dir: ../imodel/16
+  stage: g
+  sim: false
+  ip: 192.168.125.183
+  save: true
+  show: true
+ 
+dataset:
+  # dir: ../io/input
+  # list: ../io/list.txt
+  vocab: ../vocab
+  res: ../io/output

@@ -1,0 +1,49 @@
+[parse]
+net_name = 'segrnn_cls'
+framework = 'pytorch'
+inputs = [[1,61,405],[549,1,512],[1,61,512]]
+inputs_layout = 'FD;FD;FD'
+pre_method = 'nop;nop;nop'
+pre_mean = 'nop;nop;nop'
+pre_scale = 'nop;nop;nop'
+channel_swap = 'nop;nop;nop'
+network = 'fmodel/segrnn_cls.pt'
+jr_path = '../3_deploy/modelzoo/segrnn/imodel/cls/16/' 
+frame_version = '1.9'
+
+[optimize]
+target = 'BUYI'
+json = '../3_deploy/modelzoo/segrnn/imodel/cls/16/segrnn_cls_parsed.json'
+raw = '../3_deploy/modelzoo/segrnn/imodel/cls/16/segrnn_cls_parsed.raw'
+jr_path = '../3_deploy/modelzoo/segrnn/imodel/cls/16/' 
+pass_off ="icraft.RemoveUselessMaxpoolPass"
+
+[quantize]
+forward_mode = 'image'
+saturation = 'null'
+forward_dir = 'qtset/cls/'
+forward_list = 'qtset/cls/cls.txt'
+bits = 16
+json = '../3_deploy/modelzoo/segrnn/imodel/cls/16/segrnn_cls_optimized.json'
+raw = '../3_deploy/modelzoo/segrnn/imodel/cls/16/segrnn_cls_optimized.raw'
+jr_path = '../3_deploy/modelzoo/segrnn/imodel/cls/16/' 
+per = 'tensor'
+target = "buyi"
+no_transinput = true
+no_imagemake = true
+mix_precision = "config/segrnn_cls_mix_config_16.csv"
+
+[adapt]
+target = 'BUYI'
+json = '../3_deploy/modelzoo/segrnn/imodel/cls/16/segrnn_cls_quantized.json'
+raw = '../3_deploy/modelzoo/segrnn/imodel/cls/16/segrnn_cls_quantized.raw'
+jr_path = '../3_deploy/modelzoo/segrnn/imodel/cls/16/' 
+
+[generate]
+json = '../3_deploy/modelzoo/segrnn/imodel/cls/16/segrnn_cls_adapted.json'
+raw = '../3_deploy/modelzoo/segrnn/imodel/cls/16/segrnn_cls_adapted.raw'
+jr_path = '../3_deploy/modelzoo/segrnn/imodel/cls/16/' 
+log_path = './logs/'
+
+
+
