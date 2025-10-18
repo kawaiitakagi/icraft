@@ -8,7 +8,7 @@ example stays focused on the runtime APIs exposed in ``pyrtutils``.
 import argparse
 import os
 import sys
-from typing import List, Optional, Tuple
+from typing import List, Optional
 
 import cv2
 import numpy as np
@@ -26,9 +26,19 @@ from pyrtutils.icraft_utils import (  # noqa: E402  pylint: disable=wrong-import
     openDevice,
 )
 from pyrtutils.Netinfo import Netinfo  # noqa: E402  pylint: disable=wrong-import-position
-from pyrtutils.et_device import dmaInit  # noqa: E402  pylint: disable=wrong-import-position
-from pyrtutils.modelzoo_utils import soft_nms  # noqa: E402  pylint: disable=wrong-import-position
-from pyrtutils.utils import VERBOSE, mprint  # noqa: E402  pylint: disable=wrong-import-position
+from pyrtutils.modelzoo_utils import soft_nms as legacy_soft_nms  # noqa: E402  pylint: disable=wrong-import-position
+from pyrtutils.utils import (  # noqa: E402  pylint: disable=wrong-import-position
+    VERBOSE,
+    dmaInit as hardware_dma_init,
+    fpgaOPlist,
+    getOutputNormratio,
+    mprint,
+)
+from pyrtutils.detpost_hard import (  # noqa: E402  pylint: disable=wrong-import-position
+    NOC as HARD_DEFAULT_NUM_CLASSES,
+    get_det_results,
+    soft_nms as hard_soft_nms,
+)
 
 # from icraft.host_backend import HostDevice  # noqa: E402  pylint: disable=wrong-import-position
 # from icraft.xrt import Device  # noqa: E402  pylint: disable=wrong-import-position
@@ -161,7 +171,7 @@ def _decode_detections(
 
     input_h = netinfo.i_cubic[0].h
     input_w = netinfo.i_cubic[0].w
-    scale = meta["scale"]
+    scale = meta["scale"] or 1.0
     pad_x, pad_y = meta["pad"]
     orig_h, orig_w = meta["original_hw"]
 
@@ -219,7 +229,7 @@ def _decode_detections(
         return []
 
     classes = num_classes or int(max(all_ids) + 1)
-    _, nms_boxes, nms_scores, nms_ids = soft_nms(
+    _, nms_boxes, nms_scores, nms_ids = legacy_soft_nms(
         all_boxes, all_scores, all_ids, conf=conf_thresh, iou=iou_thresh, NOC=classes
     )
 
@@ -232,6 +242,60 @@ def _decode_detections(
         y2 = (box[3] - pad_y) / scale
 
         # 限制在原图范围内
+        x1 = np.clip(x1, 0, orig_w - 1)
+        y1 = np.clip(y1, 0, orig_h - 1)
+        x2 = np.clip(x2, 0, orig_w - 1)
+        y2 = np.clip(y2, 0, orig_h - 1)
+
+        detections.append([int(cls_idx), float(score), float(x1), float(y1), float(x2), float(y2)])
+
+    detections.sort(key=lambda item: item[1], reverse=True)
+    return detections
+
+
+def _decode_detections_hard(
+    outputs: List[np.ndarray],
+    network,
+    meta: dict,
+    conf_thresh: float,
+    iou_thresh: float,
+    num_classes: Optional[int],
+) -> List[List[float]]:
+    """Decode detection tensors that follow the hardware post-process layout."""
+
+    if not outputs:
+        return []
+
+    scale_list = getOutputNormratio(network)
+    classes = num_classes or HARD_DEFAULT_NUM_CLASSES
+
+    scores, boxes, ids = get_det_results(outputs, scale_list, N_CLASS=classes)
+    if not boxes:
+        return []
+
+    _, nms_boxes, nms_scores, nms_ids = hard_soft_nms(
+        boxes,
+        scores,
+        ids,
+        conf=conf_thresh,
+        iou=iou_thresh,
+        NOC=classes,
+    )
+
+    if not nms_boxes:
+        return []
+
+    scale = meta["scale"] or 1.0
+    pad_x, pad_y = meta["pad"]
+    orig_h, orig_w = meta["original_hw"]
+
+    detections: List[List[float]] = []
+    for cls_idx, score, box in zip(nms_ids, nms_scores, nms_boxes):
+        x1 = (box[0] - pad_x) / scale
+        y1 = (box[1] - pad_y) / scale
+        x2 = (box[2] - pad_x) / scale
+        y2 = (box[3] - pad_y) / scale
+
         x1 = np.clip(x1, 0, orig_w - 1)
         y1 = np.clip(y1, 0, orig_h - 1)
         x2 = np.clip(x2, 0, orig_w - 1)
@@ -324,6 +388,11 @@ def _parse_args() -> argparse.Namespace:
         "--multi-label",
         action="store_true",
         help="Keep boxes for every class above the confidence threshold (multi-label mode).",
+    )
+    parser.add_argument(
+        "--hard-layout",
+        action="store_true",
+        help="Enable hardware post-process decoding for custom operator layouts.",
     )
     parser.add_argument(
         "--save-vis",
@@ -470,6 +539,10 @@ def main() -> None:
     network_view = network.view(netinfo.inp_shape_opid + 1)
 
     mmu_required = netinfo.mmu or args.enable_mmu
+    custom_ops = fpgaOPlist(network)
+    has_imk = "customop::ImageMakeNode" in custom_ops
+    mprint(f"Detected custom ops: {sorted(custom_ops)}", VERBOSE, 1)
+    mprint(f"ImageMakeNode enabled: {has_imk}", VERBOSE, 0)
 
     if args.sim:
         device = HostDevice.Default()
@@ -500,9 +573,15 @@ def main() -> None:
     input_tensor = numpy2Tensor(input_data, network)
 
     if not args.sim:
-        dmaInit(args.sim, netinfo.ImageMake_on, netinfo.i_shape[0][1:], input_tensor, device)
+        hardware_dma_init(device, input_tensor, netinfo.i_shape[0][1:], has_imk)
 
     outputs = session.forward([input_tensor])
+
+    if args.hard_layout and not args.sim:
+        try:
+            device.reset(0)
+        except AttributeError:
+            mprint("Device reset not supported on this backend.", VERBOSE, 0)
 
     output_arrays: List[np.ndarray] = []
     for index, tensor in enumerate(outputs):
@@ -526,10 +605,25 @@ def main() -> None:
     #     args.multi_label,
     #     original_hw,
     # )
-    detections = _decode_detections(
-    output_arrays, netinfo, args.conf, args.iou,
-    args.num_classes, args.multi_label, meta,
-    )
+    if args.hard_layout:
+        detections = _decode_detections_hard(
+            output_arrays,
+            network,
+            meta,
+            args.conf,
+            args.iou,
+            args.num_classes,
+        )
+    else:
+        detections = _decode_detections(
+            output_arrays,
+            netinfo,
+            args.conf,
+            args.iou,
+            args.num_classes,
+            args.multi_label,
+            meta,
+        )
     
     if detections:
         mprint("Detections [cls, conf, x1, y1, x2, y2]", VERBOSE, 0)
